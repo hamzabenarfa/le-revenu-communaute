@@ -2,7 +2,14 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  startTransition,
+  useEffect,
+  useOptimistic,
+  useRef,
+  useState,
+} from "react";
 import { loadFeedPage, rsvpEvent, votePoll } from "@/app/actions/community";
 import {
   discussionHref,
@@ -205,6 +212,24 @@ export function FeedSection({
   const [density, setDensity] = useDensity();
   const { openComposer } = useApp();
   const { query, discussions } = useFeedPages(firstPage, paging);
+  const router = useRouter();
+  // The clicked tab lights up at once and the list turns into its skeleton until
+  // the server sends the new feed; both revert on their own when it arrives.
+  const [shownTab, setShownTab] = useOptimistic(active);
+  const [switching, setSwitching] = useOptimistic(false);
+  const openTab = (e: React.MouseEvent<HTMLAnchorElement>, tab: FeedTab) => {
+    // New tab, new window and the current tab keep the browser's behavior.
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
+      return;
+    e.preventDefault();
+    if (tab === shownTab) return;
+    const { href } = e.currentTarget;
+    startTransition(() => {
+      setShownTab(tab);
+      setSwitching(true);
+      router.push(href, { scroll: false });
+    });
+  };
   const view = (d: Density, icon: IconName, label: string) => (
     <button
       type="button"
@@ -219,7 +244,9 @@ export function FeedSection({
   );
 
   let list: React.ReactNode;
-  if (!discussions.length) {
+  if (switching) {
+    list = <FeedSkeleton count={4} compact={density === "compact"} />;
+  } else if (!discussions.length) {
     list = (
       <div className="feed">
         <div className="empty">
@@ -269,8 +296,9 @@ export function FeedSection({
               <Link
                 key={tab}
                 href={href}
-                className={`tab${tab === active ? " on" : ""}`}
-                aria-current={tab === active ? "page" : undefined}
+                className={`tab${tab === shownTab ? " on" : ""}`}
+                aria-current={tab === shownTab ? "page" : undefined}
+                onClick={(e) => openTab(e, tab)}
               >
                 <Icon name={icon} />
                 {label}
@@ -301,7 +329,7 @@ export function FeedSection({
         </Link>
       )}
       {list}
-      {discussions.length > 0 && <LoadMore query={query} />}
+      {!switching && discussions.length > 0 && <LoadMore query={query} />}
     </>
   );
 }

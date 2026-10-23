@@ -1634,6 +1634,58 @@
     gap: 10px;
     padding: 8px 0 4px;
   }
+
+  /* Skeletons: same boxes as the real cards, with a soft sweep while loading */
+  .sk {
+    display: block;
+    max-width: 100%;
+    border-radius: 6px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--fill) 50%,
+        transparent 100%
+      )
+      var(--fill);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: sk-sweep 1.4s ease-in-out infinite;
+  }
+  .sk-round {
+    border-radius: 50%;
+  }
+  .sk-count {
+    width: 62px;
+    height: 58px;
+    border-radius: var(--r-sm);
+  }
+  .sk-col {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+  }
+  .sk-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sk-foot {
+    margin-top: 4px;
+  }
+  .sk-card,
+  .sk-card:hover {
+    cursor: default;
+    background: none;
+  }
+  @keyframes sk-sweep {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
   @keyframes flash {
     0%,
     40% {

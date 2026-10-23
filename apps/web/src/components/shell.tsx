@@ -13,6 +13,7 @@ import { ModalHost } from "./app/modals";
 import { QueryProvider } from "./app/query-provider";
 import { SpaceIcon, spaceHref } from "./atoms";
 import { Icon } from "./icon";
+import { FeedSkeleton } from "./skeletons";
 
 const SITE = "https://www.lerevenu.com";
 const SITE_NAV = [
@@ -149,7 +150,7 @@ export function ShellFallback() {
         <div className="layout no-right">
           <nav className="side" aria-hidden="true" />
           <main className="main">
-            <div className="card" style={{ height: 180 }} aria-busy="true" />
+            <FeedSkeleton />
           </main>
         </div>
       </div>
