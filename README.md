@@ -90,7 +90,7 @@ Strapi needs a long-running server, so it cannot run on Vercel. The free setup s
 | `SEED_USER_PASSWORD` | Password of the demo members (8+ chars) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Strapi admin account (8+ chars, upper, lower, digit) |
 
-The first start creates the schema, the demo data and the admin account. Check `https://<service>.onrender.com/_health` returns `204`, then set `SEED_ON_START=false` for faster restarts.
+Strapi creates the schema on its first start. On a new, empty database, set `SEED_ON_START=true` in the Render environment for that first deploy: it loads the demo data and creates the admin account (both idempotent). Once `https://<service>.onrender.com/_health` returns `204`, set it back to `false` for faster cold starts.
 
 **3. Vercel.** *Add New → Project*, import this repository, set **Root Directory** to `apps/web`, and add:
 

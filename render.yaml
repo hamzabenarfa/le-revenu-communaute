@@ -43,10 +43,11 @@ services:
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: 7d
-      # Seeds the demo data and the admin account on start (both idempotent).
-      # Set to "false" once the first deploy is live: it shortens cold starts.
+      # "true" seeds the demo data and the admin account on start (both idempotent).
+      # Off once the database is seeded: free instances cold-start after 15 idle minutes,
+      # and re-checking the seed on each start delays the first request.
       - key: SEED_ON_START
-        value: "true"
+        value: "false"
       - key: SEED_USER_PASSWORD
         sync: false
       - key: ADMIN_EMAIL
