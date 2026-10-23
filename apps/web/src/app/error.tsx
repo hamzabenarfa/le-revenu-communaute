@@ -4,10 +4,10 @@ import { Icon } from "@/components/icon";
 
 /** Last-resort boundary: no stack trace or internal detail reaches the visitor. */
 export default function RouteError({
-  reset,
+  retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }) {
   return (
     <div className="layout no-right">
@@ -18,7 +18,7 @@ export default function RouteError({
           <p>
             La page n&apos;a pas pu s&apos;afficher. Réessayez dans un instant.
           </p>
-          <button type="button" className="btn btn-secondary" onClick={reset}>
+          <button type="button" className="btn btn-secondary" onClick={retry}>
             <Icon name="refresh" />
             Réessayer
           </button>
