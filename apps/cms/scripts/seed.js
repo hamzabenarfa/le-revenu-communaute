@@ -5,7 +5,7 @@
  * Usage: npm run seed            (idempotent)
  *        npm run seed -- --reset (wipe demo content and rebuild it)
  */
-const { compileStrapi, createStrapi } = require('@strapi/strapi');
+const { loadStrapi } = require('./load-strapi');
 
 async function main() {
   const password = process.env.SEED_USER_PASSWORD;
@@ -13,8 +13,7 @@ async function main() {
     throw new Error('Set SEED_USER_PASSWORD (min. 8 characters) in apps/cms/.env before seeding.');
   }
 
-  const appContext = await compileStrapi();
-  const app = await createStrapi(appContext).load();
+  const app = await loadStrapi();
   try {
     const { seedDemo } = require('../dist/src/seed');
     await seedDemo(app, password, { reset: process.argv.includes('--reset') });

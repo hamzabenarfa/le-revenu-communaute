@@ -7,7 +7,7 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY --chown=node:node . .
 ENV NODE_ENV=production
-# Dev dependencies stay: the seed script compiles the TypeScript project at runtime.
+# The seed and admin scripts reuse the compiled dist/ (scripts/load-strapi.js), like `strapi start`.
 RUN npm run build && mkdir -p public/uploads
 EXPOSE 1337
 ENTRYPOINT ["sh", "docker-entrypoint.sh"]

@@ -4,13 +4,13 @@
  * Creates the local Strapi admin from ADMIN_EMAIL / ADMIN_PASSWORD (apps/cms/.env).
  * Idempotent: does nothing if that admin already exists. Usage: npm run admin:create
  */
-const { compileStrapi, createStrapi } = require('@strapi/strapi');
+const { loadStrapi } = require('./load-strapi');
 
 async function main() {
   const { ADMIN_EMAIL: email, ADMIN_PASSWORD: password } = process.env;
   if (!email || !password) throw new Error('Set ADMIN_EMAIL and ADMIN_PASSWORD in apps/cms/.env.');
 
-  const app = await createStrapi(await compileStrapi()).load();
+  const app = await loadStrapi();
   try {
     const users = app.service('admin::user');
     if (await users.exists({ email })) {
