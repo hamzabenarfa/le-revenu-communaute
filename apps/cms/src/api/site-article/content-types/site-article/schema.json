@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "site_articles",
+  "info": {
+    "singularName": "site-article",
+    "pluralName": "site-articles",
+    "displayName": "Site article",
+    "description": "« À la une sur lerevenu.com » highlight"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "kicker": {
+      "type": "string",
+      "required": true,
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "url": {
+      "type": "string",
+      "required": true,
+      "maxLength": 300
+    },
+    "paid": {
+      "type": "boolean",
+      "default": false
+    },
+    "position": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

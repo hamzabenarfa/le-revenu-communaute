@@ -1,36 +1,16 @@
 {
-  "name": "overlord_media_test",
-  "version": "0.1.0",
+  "name": "lerevenu-community",
   "private": true,
+  "description": "Le Revenu community technical test: Next.js (apps/web) + Strapi v5 (apps/cms) + PostgreSQL",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
-  },
-  "dependencies": {
-    "next": "16.4.2",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.4.2",
-    "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  },
-  "packageManager": "bun@1.4.0",
-  "ignoreScripts": [
-    "sharp",
-    "unrs-resolver"
-  ],
-  "trustedDependencies": [
-    "sharp",
-    "unrs-resolver"
-  ]
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "setup": "npm --prefix apps/cms install && cd apps/web && bun install",
+    "seed": "npm --prefix apps/cms run seed",
+    "dev:cms": "npm --prefix apps/cms run develop",
+    "dev:web": "cd apps/web && bun run dev",
+    "test": "npm --prefix apps/cms test && cd apps/web && bun run test",
+    "lint": "cd apps/web && bun run lint",
+    "typecheck": "npm --prefix apps/cms run typecheck && cd apps/web && bun run typecheck"
+  }
 }

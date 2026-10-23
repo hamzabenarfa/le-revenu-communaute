@@ -1,0 +1,12 @@
+@import "tailwindcss";
+/* Le Revenu design system (ported from the prototype) */
+@import "./community.css";
+
+@theme inline {
+  --font-display: var(--f-display);
+  --font-sans: var(--f-body);
+  --color-brand: var(--brand);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+}

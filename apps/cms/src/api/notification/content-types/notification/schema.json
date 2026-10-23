@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notifications",
+  "info": {
+    "singularName": "notification",
+    "pluralName": "notifications",
+    "displayName": "Notification",
+    "description": "In-app notification for a member"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "recipient": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "actor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": [
+        "reply",
+        "like",
+        "mention",
+        "badge",
+        "solution",
+        "level",
+        "event"
+      ],
+      "required": true
+    },
+    "text": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "badge": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "discussion": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discussion.discussion"
+    },
+    "post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

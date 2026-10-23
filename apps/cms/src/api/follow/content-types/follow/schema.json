@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "follows",
+  "info": {
+    "singularName": "follow",
+    "pluralName": "follows",
+    "displayName": "Follow",
+    "description": "A member following a discussion"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "discussion": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discussion.discussion"
+    },
+    "key": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "private": true
+    }
+  }
+}

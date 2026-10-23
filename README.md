@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Communauté Le Revenu
 
-## Getting Started
+> The reader community of *Le Revenu*, a French personal-finance magazine. Readers ask money questions, share experience and talk with the newsroom. Built with **Next.js 16**, **Strapi v5** and **PostgreSQL**.
 
-First, run the development server:
+![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs) ![React 19](https://img.shields.io/badge/React-19-149eca?logo=react) ![Strapi v5](https://img.shields.io/badge/Strapi-v5-4945ff?logo=strapi) ![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript) ![Tests](https://img.shields.io/badge/tests-184%20passing-2ea44f)
+
+This is a full-stack technical test: it turns an interactive HTML prototype into a structured, maintainable application. **Every screen and use case of the prototype works against a real API.** Nothing is simulated in the browser.
+
+<p align="center">
+  <img src="docs/screenshots/home.jpg" alt="Community home: feed tabs, weekly question and poll" width="100%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/discussion.jpg" alt="Discussion with the best answer, verified by the newsroom" width="49%">
+  <img src="docs/screenshots/mobile.jpg" alt="Mobile: home, discussion and profile" width="49%">
+</p>
+
+## Features
+
+- **Feed:** four tabs ("Pour vous", "Tendances", "Récentes", "Sans réponse"), ranked and paginated by the server. Thematic spaces, a detailed or compact view, search.
+- **Discussions:** questions, discussions and polls. "Utile" votes, best answer, newsroom-verified answers, follow, reply-to-@member, report, related reads.
+- **Publishing:** a composer that suggests similar questions as you type, @mentions with autocomplete, a trusted-links policy, and drafts that are saved automatically. Members can also write blog posts ("billets") with comments.
+- **Recognition:** points, five levels and ten badges, computed from real activity, with toasts when you earn them. Monthly and all-time leaderboard.
+- **Members:** profiles, hover cards, onboarding with interests, a profile photo.
+- **Newsroom:** the weekly question and poll, "Le Revenu répond" live sessions with RSVP, and an editorial role that sees SEO status and verifies answers.
+- **Notifications:** replies, follows, mentions, "Utile", best answers, badges and levels.
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env && docker compose up -d db                     # PostgreSQL on :5433
+
+cd apps/cms && cp .env.example .env && npm install
+npm run seed && npm run develop                                      # Strapi on :1337
+
+cd ../web && cp .env.example .env.local && bun install && bun run dev  # App on :3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000> and log in with **`demo@demo.fr` / `demo@demo.fr`**. The other demo accounts, including the newsroom account, are listed in [docs/DEMO.md](docs/DEMO.md). Replace the `changeMe` secrets in `apps/cms/.env` before using the CMS anywhere other than your own machine. Full setup: [docs/INSTALL.md](docs/INSTALL.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it is built
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+Browser ──▶ Next.js (Server Components + Server Actions) ──REST + JWT──▶ Strapi v5 ──▶ PostgreSQL
+            httpOnly session cookie, no token in JS          rules, authorization, counters, reputation, notifications
+```
 
-## Learn More
+- **Strapi owns every rule.** It handles validation, authorization, authorship (always taken from the token), points, notifications, the link policy and rate limiting. Next.js never touches the database.
+- **Permissions as code**, synced at every boot. Real PostgreSQL unique indexes, row-locked poll counts, upload type checked from the file's bytes.
+- **The prototype's design system, ported as-is** (one CSS layer, same class names), so the screens match it, dark mode included.
+- **Next 16 Cache Components:** a static shell, data streamed behind Suspense, nothing member-specific cached.
 
-To learn more about Next.js, take a look at the following resources:
+Details: [architecture and decisions](docs/ARCHITECTURE.md) · [data model](docs/DATA-MODEL.md) · [API](docs/API.md) · [security](docs/SECURITY.md) · [design](docs/DESIGN.md).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cd apps/cms && npm test      # 156 tests: unit + integration against a real Strapi and PostgreSQL
+cd apps/web && bun run test  # 28 tests: Vitest + Testing Library
+```
 
-## Deploy on Vercel
+The suites cover:
+- Anonymous writes are refused, and authors cannot be spoofed.
+- Server-side validation and ownership rules for "Utile", votes and the best answer.
+- The link policy, notifications, rendering safety, and the composer's validation.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See [docs/TESTING.md](docs/TESTING.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Repository
+
+```text
+apps/cms   Strapi v5: content types, controllers, services, policies, permissions, seed, Jest tests
+apps/web   Next.js 16: routes, Server Actions, typed Strapi client, components, Vitest tests
+docs/      product, domain, architecture, data model, API, security, design, testing, install, demo, roadmap
+```
+
+## Documentation
+
+| | |
+| --- | --- |
+| [Product](docs/PRODUCT.md) · [Domain](docs/DOMAIN.md) | What it is for, glossary, points and badges |
+| [Architecture](docs/ARCHITECTURE.md) · [Data model](docs/DATA-MODEL.md) · [API](docs/API.md) | How it works |
+| [Security](docs/SECURITY.md) · [Testing](docs/TESTING.md) | What is guaranteed, and how it is proven |
+| [Design](docs/DESIGN.md) | How the prototype is reproduced |
+| [Install](docs/INSTALL.md) · [Demo](docs/DEMO.md) · [Roadmap](docs/ROADMAP.md) | Run it, show it, extend it |
+
+---
+
+*Technical test project. "Le Revenu" is the name of the publication this exercise was written for; this repository is not affiliated with it. All member data is fictional.*

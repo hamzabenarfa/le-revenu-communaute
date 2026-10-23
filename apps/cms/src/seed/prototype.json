@@ -1,0 +1,1347 @@
+{
+ "categories": [
+  {
+   "slug": "bourse",
+   "name": "Bourse & actions",
+   "description": "Actions, ETF, PEA, compte-titres : stratégies et retours d'expérience.",
+   "icon": "candles",
+   "color": "#007aff",
+   "rubrique": "Réussir en Bourse",
+   "position": 0
+  },
+  {
+   "slug": "economie",
+   "name": "Économie",
+   "description": "Conjoncture, taux, inflation, emploi : l'actualité économique en France, en Europe et dans le monde.",
+   "icon": "globe",
+   "color": "#3d5a80",
+   "rubrique": "Économie",
+   "position": 1
+  },
+  {
+   "slug": "epargne",
+   "name": "Épargne & placements",
+   "description": "Livrets, fonds euros, obligations, comptes à terme.",
+   "icon": "piggy",
+   "color": "#34c759",
+   "rubrique": "Diversifier vos placements",
+   "position": 2
+  },
+  {
+   "slug": "assurance-vie",
+   "name": "Assurance-vie",
+   "description": "Choisir son contrat, arbitrer, transmettre.",
+   "icon": "umbrella",
+   "color": "#30b0c7",
+   "rubrique": "Diversifier vos placements",
+   "position": 3
+  },
+  {
+   "slug": "immobilier",
+   "name": "Immobilier & SCPI",
+   "description": "Résidence principale, locatif, SCPI, crédit immobilier.",
+   "icon": "building",
+   "color": "#ff9500",
+   "rubrique": "Investir dans l'immobilier",
+   "position": 4
+  },
+  {
+   "slug": "impots",
+   "name": "Impôts & fiscalité",
+   "description": "Déclaration, niches fiscales, IFI : payer le juste impôt.",
+   "icon": "receipt",
+   "color": "#5856d6",
+   "rubrique": "Réduire vos impôts",
+   "position": 5
+  },
+  {
+   "slug": "retraite",
+   "name": "Retraite",
+   "description": "PER, rachat de trimestres, cumul emploi-retraite.",
+   "icon": "armchair",
+   "color": "#ff2d55",
+   "rubrique": "Diversifier vos placements",
+   "position": 6
+  },
+  {
+   "slug": "transmission",
+   "name": "Famille & transmission",
+   "description": "Donation, succession, protection du conjoint.",
+   "icon": "family",
+   "color": "#af52de",
+   "rubrique": "Préparer une succession",
+   "position": 7
+  },
+  {
+   "slug": "alternatifs",
+   "name": "Or, cryptos & alternatifs",
+   "description": "Or physique, cryptoactifs, forêts, private equity.",
+   "icon": "gem",
+   "color": "#00c7be",
+   "rubrique": "Diversifier vos placements",
+   "position": 8
+  },
+  {
+   "slug": "budget",
+   "name": "Budget & conso",
+   "description": "Banques, crédits, assurances, bons plans.",
+   "icon": "wallet",
+   "color": "#8e8e93",
+   "rubrique": "Vie pratique",
+   "position": 9
+  },
+  {
+   "slug": "cafe",
+   "name": "Le Café du Revenu",
+   "description": "Présentations, discussions libres, idées pour la rédaction.",
+   "icon": "coffee",
+   "color": "#a2845e",
+   "rubrique": null,
+   "position": 10
+  }
+ ],
+ "users": [
+  {
+   "username": "LaRedaction",
+   "name": "La rédaction du Revenu",
+   "color": "#eb0f0f",
+   "role": "redaction",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Les journalistes du Revenu, présents chaque semaine pour répondre à vos questions.",
+   "points": 0,
+   "month": 0,
+   "streak": 0,
+   "interests": []
+  },
+  {
+   "username": "Moderation",
+   "name": "Équipe modération",
+   "color": "#6e6e73",
+   "role": "moderator",
+   "subscriber": false,
+   "pro": null,
+   "bio": "",
+   "points": 0,
+   "month": 0,
+   "streak": 0,
+   "interests": []
+  },
+  {
+   "username": "Vincent_ETF",
+   "name": "Vincent",
+   "color": "#5856d6",
+   "role": "member",
+   "subscriber": true,
+   "pro": null,
+   "bio": "Ingénieur, investisseur passif depuis 2015. Fan des ETF monde.",
+   "points": 612,
+   "month": 148,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "PapyBoursier",
+   "name": "Papy Boursier",
+   "color": "#c93400",
+   "role": "member",
+   "subscriber": true,
+   "pro": null,
+   "bio": "40 ans de Bourse, des erreurs et quelques réussites.",
+   "points": 804,
+   "month": 121,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Odile.Retraite",
+   "name": "Odile",
+   "color": "#0a7f99",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Jeune retraitée, je gère mon patrimoine en famille.",
+   "points": 286,
+   "month": 97,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Nadia.Patrimoine",
+   "name": "Nadia",
+   "color": "#d30f45",
+   "role": "member",
+   "subscriber": true,
+   "pro": null,
+   "bio": "Mère de trois enfants, je prépare la transmission sereinement.",
+   "points": 197,
+   "month": 84,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Claire_Nantes",
+   "name": "Claire",
+   "color": "#6e6e73",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Je compare tout avant de signer.",
+   "points": 166,
+   "month": 61,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Sophie.Invest",
+   "name": "Sophie",
+   "color": "#5856d6",
+   "role": "member",
+   "subscriber": true,
+   "pro": null,
+   "bio": "Abonnée au Revenu, curieuse de tout ce qui touche à l'argent.",
+   "points": 151,
+   "month": 58,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Karim_Immo",
+   "name": "Karim",
+   "color": "#c93400",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Investisseur immobilier, 3 biens locatifs et quelques SCPI.",
+   "points": 131,
+   "month": 49,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Bertrand59",
+   "name": "Bertrand",
+   "color": "#6e6e73",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Cadre dans le Nord, je prépare ma retraite.",
+   "points": 118,
+   "month": 42,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Marc_Lyon",
+   "name": "Marc",
+   "color": "#0a7f99",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Passionné d'or et d'histoire monétaire.",
+   "points": 92,
+   "month": 23,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "LeRentier",
+   "name": "Le Rentier",
+   "color": "#5856d6",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Stratégie dividendes, patience et réinvestissement.",
+   "points": 73,
+   "month": 31,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Thomas_PEA",
+   "name": "Thomas",
+   "color": "#c93400",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "32 ans, je débute en Bourse.",
+   "points": 58,
+   "month": 36,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Julie_Toulouse",
+   "name": "Julie",
+   "color": "#5856d6",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Salariée, j'optimise ma fiscalité sans prise de tête.",
+   "points": 44,
+   "month": 19,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "JeuneEpargnant",
+   "name": "Hugo",
+   "color": "#0a7f99",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "25 ans, premier CDI, je veux bien démarrer.",
+   "points": 37,
+   "month": 33,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Helene_R",
+   "name": "Hélène",
+   "color": "#6e6e73",
+   "role": "member",
+   "subscriber": false,
+   "pro": null,
+   "bio": "Je loue un studio meublé et découvre la fiscalité qui va avec.",
+   "points": 22,
+   "month": 22,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Camille_B",
+   "name": "Camille",
+   "color": "#d30f45",
+   "role": "member",
+   "subscriber": true,
+   "pro": null,
+   "bio": "Cadre, 41 ans. Je prépare ma retraite et celle de mes parents.",
+   "points": 142,
+   "month": 64,
+   "streak": 6,
+   "interests": [
+    "bourse",
+    "assurance-vie",
+    "retraite"
+   ]
+  },
+  {
+   "username": "Sandrine_CGP",
+   "name": "Sandrine Morel",
+   "color": "#0a7f99",
+   "role": "member",
+   "subscriber": false,
+   "pro": "Conseillère en gestion de patrimoine",
+   "bio": "CGP indépendante depuis quinze ans. Je partage ici à titre informatif, sans démarchage.",
+   "points": 238,
+   "month": 41,
+   "streak": 3,
+   "interests": []
+  },
+  {
+   "username": "Me_Garnier",
+   "name": "Maître Garnier",
+   "color": "#5856d6",
+   "role": "member",
+   "subscriber": false,
+   "pro": "Notaire",
+   "bio": "Notaire en région lyonnaise. Successions, donations, régimes matrimoniaux.",
+   "points": 175,
+   "month": 26,
+   "streak": 3,
+   "interests": []
+  }
+ ],
+ "topics": [
+  {
+   "key": 1,
+   "category": "cafe",
+   "type": "discussion",
+   "author": "LaRedaction",
+   "minutesAgo": 12960,
+   "pinned": true,
+   "featured": "none",
+   "useful": 64,
+   "views": 2140,
+   "title": "Bienvenue dans la Communauté du Revenu ! Présentez-vous ici",
+   "content": "Bonjour à toutes et à tous,\n\nCet espace est le vôtre : posez vos questions, partagez vos expériences, aidez les autres membres. Les journalistes du Revenu passent chaque jour et répondent aux questions les plus utiles.\n\n**Pour bien démarrer :**\n- Présentez-vous en une phrase en réponse à ce message\n- Choisissez les espaces qui vous intéressent\n- Marquez « Utile » les réponses qui vous aident : c'est ce qui fait remonter les meilleures contributions\n\nBienvenue !",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Sophie.Invest",
+     "content": "Bonjour ! Abonnée au magazine depuis 6 ans, ravie de pouvoir enfin échanger avec d'autres lecteurs.",
+     "useful": 12,
+     "minutesAgo": 10560,
+     "verified": false
+    },
+    {
+     "author": "JeuneEpargnant",
+     "content": "Salut tout le monde, Hugo, 25 ans. Premier CDI et premier salaire à placer : je suis là pour apprendre !",
+     "useful": 18,
+     "minutesAgo": 8160,
+     "verified": false
+    },
+    {
+     "author": "PapyBoursier",
+     "content": "Bienvenue aux jeunes ! N'hésitez pas à poser des questions, même basiques. On est tous passés par là.",
+     "useful": 25,
+     "minutesAgo": 5760,
+     "verified": false
+    },
+    {
+     "author": "Helene_R",
+     "content": "Hello, Hélène. Je viens de mettre un studio en location meublée et j'ai mille questions sur la fiscalité.",
+     "useful": 7,
+     "minutesAgo": 3360,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 2,
+   "category": "cafe",
+   "type": "discussion",
+   "author": "LaRedaction",
+   "minutesAgo": 1800,
+   "pinned": false,
+   "featured": "question",
+   "useful": 41,
+   "views": 980,
+   "title": "Question de la semaine : quel est le meilleur conseil d'argent que vous ayez reçu ?",
+   "content": "Chaque semaine, la rédaction pose une question à la communauté. Les réponses les plus inspirantes pourront être reprises, avec votre accord, dans la newsletter.\n\nAlors : quel conseil d'argent a changé votre vie ? Qui vous l'a donné ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "PapyBoursier",
+     "content": "Mon père : « N'investis jamais l'argent dont tu auras besoin dans les cinq ans. » Ça m'a évité bien des ventes en catastrophe.",
+     "useful": 31,
+     "minutesAgo": 1519,
+     "verified": false
+    },
+    {
+     "author": "Vincent_ETF",
+     "content": "« Le temps passé sur le marché compte plus que le moment où on y entre. » Investir tous les mois, sans se poser de questions.",
+     "useful": 22,
+     "minutesAgo": 1238,
+     "verified": false
+    },
+    {
+     "author": "Claire_Nantes",
+     "content": "Faire le tour de ses contrats une fois par an. J'économise plusieurs centaines d'euros par an sur mes assurances grâce à ça.",
+     "useful": 17,
+     "minutesAgo": 956,
+     "verified": false
+    },
+    {
+     "author": "Nadia.Patrimoine",
+     "content": "Ma notaire : « Une succession se prépare de son vivant, pas après. » On a tout réorganisé ensuite.",
+     "useful": 14,
+     "minutesAgo": 675,
+     "verified": false
+    },
+    {
+     "author": "JeuneEpargnant",
+     "content": "Se constituer une épargne de précaution avant d'investir. Simple, mais je ne l'aurais pas fait spontanément.",
+     "useful": 9,
+     "minutesAgo": 394,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 3,
+   "category": "epargne",
+   "type": "poll",
+   "author": "LaRedaction",
+   "minutesAgo": 1200,
+   "pinned": false,
+   "featured": "poll",
+   "useful": 28,
+   "views": 1460,
+   "title": "Sondage de la semaine : quel est votre placement prioritaire pour les 12 prochains mois ?",
+   "content": "Votez puis expliquez votre choix en commentaire : les résultats seront commentés dans le prochain numéro.",
+   "article": null,
+   "pollOptions": [
+    {
+     "label": "Assurance-vie",
+     "votes": 214
+    },
+    {
+     "label": "Actions / PEA",
+     "votes": 268
+    },
+    {
+     "label": "Immobilier / SCPI",
+     "votes": 87
+    },
+    {
+     "label": "Livrets et épargne sans risque",
+     "votes": 141
+    },
+    {
+     "label": "Or",
+     "votes": 64
+    },
+    {
+     "label": "Rembourser mes crédits",
+     "votes": 39
+    }
+   ],
+   "solution": null,
+   "replies": [
+    {
+     "author": "Vincent_ETF",
+     "content": "PEA sans hésiter, versement programmé chaque mois sur un ETF monde.",
+     "useful": 11,
+     "minutesAgo": 927,
+     "verified": false
+    },
+    {
+     "author": "Odile.Retraite",
+     "content": "Assurance-vie, pour la souplesse et la transmission.",
+     "useful": 8,
+     "minutesAgo": 655,
+     "verified": false
+    },
+    {
+     "author": "Marc_Lyon",
+     "content": "Un peu d'or, comme toujours. Ça ne rapporte rien mais ça rassure !",
+     "useful": 5,
+     "minutesAgo": 382,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 4,
+   "category": "bourse",
+   "type": "question",
+   "author": "Thomas_PEA",
+   "minutesAgo": 3000,
+   "pinned": false,
+   "featured": "none",
+   "useful": 19,
+   "views": 1210,
+   "title": "Ouvrir un PEA avec 5 000 € : par où commencer ?",
+   "content": "Bonjour, je viens d'ouvrir un PEA en ligne et j'ai 5 000 € à y placer. Je ne connais pas grand-chose aux actions.\n\nVaut-il mieux tout investir d'un coup ou étaler ? Et sur quoi : des ETF, quelques actions ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": 1,
+   "replies": [
+    {
+     "author": "PapyBoursier",
+     "content": "Première chose : vous avez bien une épargne de précaution à côté ? Le PEA, c'est de l'argent qu'on oublie au moins cinq ans.",
+     "useful": 14,
+     "minutesAgo": 2444,
+     "verified": false
+    },
+    {
+     "author": "Vincent_ETF",
+     "content": "Mon expérience : pour débuter, un ETF éligible au PEA qui réplique un indice mondial fait très bien le travail. Une seule ligne, des frais faibles, une large diversification.\n\nPour l'entrée : investir une partie maintenant puis programmer un versement mensuel. On lisse son point d'entrée et on prend l'habitude.\n\nRappel utile : le PEA est plafonné à 150 000 € de versements, et après cinq ans les gains sont exonérés d'impôt sur le revenu (les prélèvements sociaux restent dus).",
+     "useful": 47,
+     "minutesAgo": 1889,
+     "verified": true
+    },
+    {
+     "author": "Thomas_PEA",
+     "content": "Merci beaucoup, c'est très clair ! Oui, j'ai trois mois de salaire sur un livret à côté.",
+     "useful": 3,
+     "minutesAgo": 1333,
+     "verified": false
+    },
+    {
+     "author": "LaRedaction",
+     "content": "Très bonne réponse de @Vincent_ETF. Nous avons consacré un dossier aux ETF : comparez surtout les frais courants et la taille du fonds avant de choisir. Et gardez la tête froide les jours de baisse : c'est là que la régularité paie.",
+     "useful": 29,
+     "minutesAgo": 778,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 5,
+   "category": "epargne",
+   "type": "question",
+   "author": "JeuneEpargnant",
+   "minutesAgo": 840,
+   "pinned": false,
+   "featured": "none",
+   "useful": 33,
+   "views": 1890,
+   "title": "J'ai 25 ans et 10 000 € de côté : je fais quoi ?",
+   "content": "Premier CDI depuis un an, j'ai réussi à mettre 10 000 € de côté sur un livret. Pas de projet immobilier avant quatre ou cinq ans.\n\nJe me sens un peu perdu entre PEA, assurance-vie, PER… Comment auriez-vous réparti à mon âge ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Claire_Nantes",
+     "content": "Garde déjà trois à six mois de dépenses sur ton livret. Le reste peut travailler.",
+     "useful": 21,
+     "minutesAgo": 684,
+     "verified": false
+    },
+    {
+     "author": "Vincent_ETF",
+     "content": "À 25 ans, ouvrir un PEA et une assurance-vie tôt, même avec peu, c'est surtout prendre date pour la fiscalité. L'antériorité compte.",
+     "useful": 26,
+     "minutesAgo": 529,
+     "verified": false
+    },
+    {
+     "author": "PapyBoursier",
+     "content": "Le PER peut attendre à mon avis : l'argent est bloqué jusqu'à la retraite (sauf achat de la résidence principale) et l'avantage fiscal est faible si ton taux d'imposition est bas.",
+     "useful": 19,
+     "minutesAgo": 373,
+     "verified": false
+    },
+    {
+     "author": "Sophie.Invest",
+     "content": "Pareil que les autres. Et surtout : automatise tes versements, c'est ce qui fait la différence sur vingt ans.",
+     "useful": 12,
+     "minutesAgo": 218,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 6,
+   "category": "assurance-vie",
+   "type": "question",
+   "author": "Odile.Retraite",
+   "minutesAgo": 4320,
+   "pinned": false,
+   "featured": "none",
+   "useful": 24,
+   "views": 1340,
+   "title": "Assurance-vie après 70 ans : est-ce encore intéressant ?",
+   "content": "J'ai 71 ans et je me demande s'il est encore utile de verser sur une assurance-vie, notamment pour la transmission à mes petits-enfants. On m'a dit que la fiscalité était moins avantageuse après 70 ans ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": 0,
+   "replies": [
+    {
+     "author": "Nadia.Patrimoine",
+     "content": "Oui, mais ça reste souvent intéressant. Pour les versements après 70 ans, l'abattement est de 30 500 € au total (tous bénéficiaires confondus) et il ne porte que sur les primes versées : les gains, eux, sont exonérés de droits de succession. Sur une longue durée, ça peut peser lourd.",
+     "useful": 38,
+     "minutesAgo": 3338,
+     "verified": true
+    },
+    {
+     "author": "Odile.Retraite",
+     "content": "Merci ! Je ne savais pas que les gains étaient exonérés. Je vais en parler à mon conseiller.",
+     "useful": 4,
+     "minutesAgo": 2356,
+     "verified": false
+    },
+    {
+     "author": "LaRedaction",
+     "content": "Précision utile : pour les primes versées avant 70 ans, l'abattement est de 152 500 € par bénéficiaire. Les deux régimes peuvent se combiner sur un même contrat.",
+     "useful": 27,
+     "minutesAgo": 1375,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 7,
+   "category": "immobilier",
+   "type": "discussion",
+   "author": "Karim_Immo",
+   "minutesAgo": 2160,
+   "pinned": false,
+   "featured": "none",
+   "useful": 15,
+   "views": 760,
+   "title": "SCPI : vous avez renforcé ces derniers mois ou vous attendez ?",
+   "content": "Après les baisses de prix de parts de certaines SCPI, je vois deux écoles autour de moi : ceux qui en profitent pour renforcer et ceux qui ne veulent plus en entendre parler.\n\nEt vous, comment avez-vous réagi ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Helene_R",
+     "content": "J'attends. J'ai été échaudée par les délais de revente sur une de mes SCPI.",
+     "useful": 6,
+     "minutesAgo": 1669,
+     "verified": false
+    },
+    {
+     "author": "PapyBoursier",
+     "content": "J'ai renforcé, mais uniquement sur des SCPI récentes, sans immobilier de bureaux acheté au plus haut.",
+     "useful": 13,
+     "minutesAgo": 1178,
+     "verified": false
+    },
+    {
+     "author": "Karim_Immo",
+     "content": "C'est aussi mon approche. Je regarde maintenant de près le taux d'occupation et la diversification géographique.",
+     "useful": 5,
+     "minutesAgo": 687,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 8,
+   "category": "impots",
+   "type": "question",
+   "author": "Julie_Toulouse",
+   "minutesAgo": 5760,
+   "pinned": false,
+   "featured": "none",
+   "useful": 12,
+   "views": 910,
+   "title": "Frais réels ou abattement de 10 % : comment savoir ce qui est le plus avantageux ?",
+   "content": "Je fais 35 km aller-retour par jour en voiture pour aller travailler. Est-ce que je devrais passer aux frais réels ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": 0,
+   "replies": [
+    {
+     "author": "Bertrand59",
+     "content": "Faites le calcul simplement : additionnez vos frais (barème kilométrique selon la puissance de la voiture, repas, etc.) et comparez avec 10 % de votre salaire. Si vos frais dépassent, les frais réels sont gagnants. Attention : il faut garder les justificatifs.",
+     "useful": 22,
+     "minutesAgo": 4066,
+     "verified": false
+    },
+    {
+     "author": "Julie_Toulouse",
+     "content": "Je viens de faire le calcul et je gagne quelques centaines d'euros. Merci !",
+     "useful": 2,
+     "minutesAgo": 2372,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 9,
+   "category": "transmission",
+   "type": "question",
+   "author": "Nadia.Patrimoine",
+   "minutesAgo": 2400,
+   "pinned": false,
+   "featured": "none",
+   "useful": 17,
+   "views": 690,
+   "title": "Donation aux enfants : faut-il le faire maintenant ou attendre ?",
+   "content": "Nos enfants ont 19, 22 et 25 ans. Nous pensons à leur donner une partie de notre épargne pour les aider à démarrer. Est-ce le bon moment ? Quels pièges éviter ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Odile.Retraite",
+     "content": "Chaque parent peut donner 100 000 € par enfant en franchise de droits, et cet abattement se renouvelle tous les quinze ans. Plus on commence tôt, plus on peut en profiter plusieurs fois.",
+     "useful": 16,
+     "minutesAgo": 1855,
+     "verified": false
+    },
+    {
+     "author": "PapyBoursier",
+     "content": "Le piège classique : donner trop et se retrouver juste soi-même. Gardez de quoi vivre confortablement !",
+     "useful": 11,
+     "minutesAgo": 1309,
+     "verified": false
+    },
+    {
+     "author": "Me_Garnier",
+     "content": "J'ajoute un point de forme : une donation qui porte sur un bien immobilier passe obligatoirement devant notaire. Pour une somme d'argent, un don manuel suffit, mais il doit être déclaré à l'administration fiscale.",
+     "useful": 13,
+     "minutesAgo": 764,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 10,
+   "category": "retraite",
+   "type": "discussion",
+   "author": "Bertrand59",
+   "minutesAgo": 3600,
+   "pinned": false,
+   "featured": "none",
+   "useful": 9,
+   "views": 540,
+   "title": "PER : vos retours d'expérience après quelques années ?",
+   "content": "J'ai ouvert un PER il y a trois ans pour la déduction fiscale. Je m'interroge sur les frais et la sortie. Vos retours ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Vincent_ETF",
+     "content": "Le point clé pour moi : les frais. Un PER en ligne avec des ETF, c'est très différent d'un PER bancaire avec 3 % de frais d'entrée.",
+     "useful": 10,
+     "minutesAgo": 2782,
+     "verified": false
+    },
+    {
+     "author": "Odile.Retraite",
+     "content": "Pensez aussi à la fiscalité à la sortie : ce que vous déduisez aujourd'hui sera imposé plus tard.",
+     "useful": 8,
+     "minutesAgo": 1964,
+     "verified": false
+    },
+    {
+     "author": "Sandrine_CGP",
+     "content": "Un point que je vois souvent négligé : si vous avez déduit vos versements, la part de capital correspondante sera imposée à la sortie, et les gains aussi. Comparez votre taux marginal d'imposition actuel avec celui que vous anticipez à la retraite : c'est lui qui dit si la déduction est vraiment avantageuse.",
+     "useful": 15,
+     "minutesAgo": 1145,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 11,
+   "category": "bourse",
+   "type": "poll",
+   "author": "PapyBoursier",
+   "minutesAgo": 4800,
+   "pinned": false,
+   "featured": "none",
+   "useful": 11,
+   "views": 820,
+   "title": "Combien de lignes avez-vous dans votre PEA ?",
+   "content": "Petit sondage par curiosité. Moi j'en ai 14, et je me demande si ce n'est pas trop !",
+   "article": null,
+   "pollOptions": [
+    {
+     "label": "1 à 3",
+     "votes": 162
+    },
+    {
+     "label": "4 à 10",
+     "votes": 121
+    },
+    {
+     "label": "11 à 20",
+     "votes": 70
+    },
+    {
+     "label": "Plus de 20",
+     "votes": 28
+    }
+   ],
+   "solution": null,
+   "replies": [
+    {
+     "author": "Vincent_ETF",
+     "content": "Une seule ligne ici : un ETF monde. Ennuyeux mais efficace.",
+     "useful": 9,
+     "minutesAgo": 3388,
+     "verified": false
+    },
+    {
+     "author": "LeRentier",
+     "content": "Une vingtaine, toutes à dividendes. Je suis tout l'inverse de Vincent !",
+     "useful": 6,
+     "minutesAgo": 1976,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 12,
+   "category": "alternatifs",
+   "type": "discussion",
+   "author": "Marc_Lyon",
+   "minutesAgo": 6600,
+   "pinned": false,
+   "featured": "none",
+   "useful": 8,
+   "views": 470,
+   "title": "Or physique : pièces ou lingots, que privilégiez-vous ?",
+   "content": "Je commence à acheter un peu d'or physique. Pièces ou petits lingots ? Et où les stockez-vous ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "PapyBoursier",
+     "content": "Pièces, pour pouvoir revendre par petites quantités si besoin.",
+     "useful": 7,
+     "minutesAgo": 4659,
+     "verified": false
+    },
+    {
+     "author": "Claire_Nantes",
+     "content": "Attention aux frais de garde et à la prime à l'achat, ça varie beaucoup d'un vendeur à l'autre.",
+     "useful": 9,
+     "minutesAgo": 2718,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 13,
+   "category": "budget",
+   "type": "question",
+   "author": "Claire_Nantes",
+   "minutesAgo": 480,
+   "pinned": false,
+   "featured": "none",
+   "useful": 6,
+   "views": 210,
+   "title": "Changer de banque : vos retours sur la mobilité bancaire ?",
+   "content": "Je veux quitter ma banque traditionnelle pour une banque en ligne. Le service de mobilité fonctionne-t-il vraiment bien ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Sophie.Invest",
+     "content": "Très bien chez moi, tous les prélèvements ont été transférés en quelques semaines. Gardez l'ancien compte ouvert un mois ou deux par sécurité.",
+     "useful": 4,
+     "minutesAgo": 280,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 14,
+   "category": "cafe",
+   "type": "discussion",
+   "author": "Sophie.Invest",
+   "minutesAgo": 1560,
+   "pinned": false,
+   "featured": "none",
+   "useful": 22,
+   "views": 640,
+   "title": "Quel sujet aimeriez-vous voir traité par la rédaction ?",
+   "content": "La rédaction lit ce forum, profitons-en ! Moi j'aimerais un dossier complet sur la succession dans les familles recomposées.",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Karim_Immo",
+     "content": "Un comparatif des SCPI par type d'actifs, avec le recul sur les dernières années.",
+     "useful": 9,
+     "minutesAgo": 1205,
+     "verified": false
+    },
+    {
+     "author": "Helene_R",
+     "content": "Un guide pas à pas de la déclaration en location meublée !",
+     "useful": 12,
+     "minutesAgo": 851,
+     "verified": false
+    },
+    {
+     "author": "LaRedaction",
+     "content": "Merci pour ces idées, nous les notons toutes. Les familles recomposées sont justement au programme d'un prochain numéro.",
+     "useful": 19,
+     "minutesAgo": 496,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 15,
+   "category": "impots",
+   "type": "question",
+   "author": "Helene_R",
+   "minutesAgo": 300,
+   "pinned": false,
+   "featured": "none",
+   "useful": 3,
+   "views": 96,
+   "title": "Location meublée : micro-BIC ou régime réel ?",
+   "content": "Je loue un studio meublé depuis deux mois. Je ne sais pas quel régime choisir pour ma première déclaration. Comment avez-vous fait votre choix ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": []
+  },
+  {
+   "key": 16,
+   "category": "bourse",
+   "type": "question",
+   "author": "LeRentier",
+   "minutesAgo": 180,
+   "pinned": false,
+   "featured": "none",
+   "useful": 2,
+   "views": 58,
+   "title": "Dividendes sur un compte-titres : flat tax ou barème ?",
+   "content": "Je perçois des dividendes sur un compte-titres ordinaire. Flat tax ou barème progressif : qu'avez-vous choisi et pourquoi ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": []
+  },
+  {
+   "key": 17,
+   "category": "retraite",
+   "type": "question",
+   "author": "Odile.Retraite",
+   "minutesAgo": 7800,
+   "pinned": false,
+   "featured": "none",
+   "useful": 7,
+   "views": 610,
+   "title": "Rachat de trimestres : est-ce que ça vaut vraiment le coup ?",
+   "content": "Une amie a racheté des trimestres pour partir plus tôt. Le coût m'a paru énorme. Quelqu'un a fait le calcul ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Bertrand59",
+     "content": "Ça dépend énormément de votre situation. Demandez une simulation à votre caisse de retraite : elle calcule le coût et le gain de pension. Le rachat est déductible du revenu imposable, ce qui adoucit l'addition.",
+     "useful": 8,
+     "minutesAgo": 4550,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 18,
+   "category": "assurance-vie",
+   "type": "discussion",
+   "author": "Vincent_ETF",
+   "minutesAgo": 1080,
+   "pinned": false,
+   "featured": "none",
+   "useful": 14,
+   "views": 530,
+   "title": "Fonds euros : quelle part gardez-vous dans votre contrat ?",
+   "content": "Suite à l'article du Revenu sur les rendements des fonds euros, je me demande quelle part vous conservez en fonds euros et en unités de compte.",
+   "article": "Fonds euros : les rendements servis par les assureurs",
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Odile.Retraite",
+     "content": "Environ 60 % en fonds euros, à mon âge je privilégie la sécurité.",
+     "useful": 6,
+     "minutesAgo": 835,
+     "verified": false
+    },
+    {
+     "author": "Camille_B",
+     "content": "Autour de 35 % chez moi, le reste en unités de compte diversifiées. Je rééquilibre une fois par an.",
+     "useful": 9,
+     "minutesAgo": 589,
+     "verified": false
+    },
+    {
+     "author": "Thomas_PEA",
+     "content": "20 % seulement, j'ai un horizon long.",
+     "useful": 3,
+     "minutesAgo": 344,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "key": 19,
+   "category": "immobilier",
+   "type": "question",
+   "author": "Karim_Immo",
+   "minutesAgo": 120,
+   "pinned": false,
+   "featured": "none",
+   "useful": 1,
+   "views": 41,
+   "title": "Crédit immobilier : renégocier ou faire racheter son prêt ?",
+   "content": "Mon taux actuel est plus élevé que les offres du moment. Vaut-il mieux renégocier avec ma banque ou passer par un rachat de crédit ? Vos expériences ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": []
+  },
+  {
+   "key": 20,
+   "category": "economie",
+   "type": "discussion",
+   "author": "Bertrand59",
+   "minutesAgo": 1680,
+   "pinned": false,
+   "featured": "none",
+   "useful": 13,
+   "views": 720,
+   "title": "Taux de la BCE : suivez-vous ses décisions pour vos placements ?",
+   "content": "Je découvre que les décisions de la Banque centrale européenne pèsent à la fois sur les crédits immobiliers, la rémunération de l'épargne et les marchés. Est-ce que vous les suivez, et est-ce qu'elles changent vos choix ?",
+   "article": null,
+   "pollOptions": null,
+   "solution": null,
+   "replies": [
+    {
+     "author": "Vincent_ETF",
+     "content": "Je les suis de loin : j'investis tous les mois quoi qu'il arrive. Je regarde surtout l'effet sur les fonds euros, qui réagissent avec retard aux variations de taux.",
+     "useful": 9,
+     "minutesAgo": 1186,
+     "verified": false
+    },
+    {
+     "author": "Odile.Retraite",
+     "content": "Moi, c'est pour les livrets et les comptes à terme : leur rémunération finit toujours par suivre le mouvement.",
+     "useful": 5,
+     "minutesAgo": 692,
+     "verified": false
+    }
+   ]
+  }
+ ],
+ "posts": [
+  {
+   "author": "Vincent_ETF",
+   "category": "bourse",
+   "minutesAgo": 4320,
+   "useful": 58,
+   "views": 1420,
+   "title": "Dix ans d'investissement passif : ce que j'ai appris",
+   "content": "J'ai commencé à investir en 2015, un peu par hasard, après avoir lu un dossier du Revenu sur les ETF. Dix ans plus tard, voici ce que je retiens.\n\n**1. La régularité bat le talent.** Je verse la même somme chaque mois, quoi qu'il arrive. Je n'ai jamais réussi à deviner le bon moment pour entrer ou sortir, et je ne connais personne qui y arrive durablement.\n\n**2. Les frais comptent plus qu'on ne le croit.** Un point de frais par an, sur vingt ans, c'est une part importante de la performance qui part ailleurs.\n\n**3. Le plus dur, c'est de ne rien faire.** Lors des fortes baisses, j'ai eu envie de tout vendre. Ne pas toucher à mon portefeuille a été ma meilleure décision.\n\nCe qui n'a pas marché pour moi :\n- ajouter des lignes « pour diversifier » alors que mon ETF l'était déjà\n- regarder mon portefeuille tous les jours\n\nJe ne dis pas que c'est la bonne méthode pour tout le monde : c'est la mienne, et elle me laisse dormir tranquille.",
+   "comments": [
+    {
+     "author": "Thomas_PEA",
+     "content": "Merci Vincent, ça me conforte dans mon choix. Le point 3 est celui qui me fait le plus peur !",
+     "useful": 9,
+     "minutesAgo": 3049
+    },
+    {
+     "author": "PapyBoursier",
+     "content": "Tout est juste. J'ajouterais : garder une épargne de précaution à côté, sinon on finit par vendre au pire moment. @Thomas_PEA, ça vaut pour toi aussi !",
+     "useful": 14,
+     "minutesAgo": 1779
+    }
+   ]
+  },
+  {
+   "author": "PapyBoursier",
+   "category": "bourse",
+   "minutesAgo": 8640,
+   "useful": 73,
+   "views": 2210,
+   "title": "Mes trois pires erreurs en Bourse (et ce qu'elles m'ont appris)",
+   "content": "Quarante ans de Bourse, ça laisse des souvenirs. Pas tous bons. Je partage ici mes trois plus belles erreurs, en espérant que les plus jeunes les évitent.\n\n**Acheter une valeur parce que tout le monde en parlait.** À la fin des années 1990, j'ai acheté des valeurs technologiques au plus haut, sur la foi des conversations de bureau. J'ai mis des années à m'en remettre.\n\n**Tout miser sur une seule entreprise.** J'ai longtemps gardé une grosse part de mon portefeuille en actions de l'entreprise où je travaillais. Le jour où elle a traversé une crise, mon salaire et mon épargne étaient menacés en même temps.\n\n**Vendre dans la panique.** En 2008, j'ai vendu une partie de mes actions près du point bas, et j'ai raté une bonne partie du rebond.\n\nCe que j'en retiens : diversifier, ne jamais investir l'argent dont on aura besoin à court terme, et se méfier de ses émotions plus que des marchés.",
+   "comments": [
+    {
+     "author": "LeRentier",
+     "content": "Le deuxième point est trop souvent oublié. Merci pour ce partage.",
+     "useful": 11,
+     "minutesAgo": 6099
+    },
+    {
+     "author": "JeuneEpargnant",
+     "content": "Merci, c'est exactement le genre de retour qu'on ne trouve nulle part ailleurs.",
+     "useful": 6,
+     "minutesAgo": 3558
+    }
+   ]
+  },
+  {
+   "author": "Odile.Retraite",
+   "category": "retraite",
+   "minutesAgo": 2880,
+   "useful": 31,
+   "views": 880,
+   "title": "Première année de retraite : comment nous avons revu notre budget",
+   "content": "Il y a un an, mon mari et moi avons pris notre retraite à quelques mois d'intervalle. Voici comment nous avons réorganisé notre budget.\n\nNous avons d'abord listé toutes nos dépenses de l'année précédente, poste par poste. Surprise : certaines ont baissé (transports, repas à l'extérieur), d'autres ont augmenté (loisirs, aide aux petits-enfants, santé).\n\n**Nos trois décisions :**\n- garder l'équivalent de six mois de dépenses sur nos livrets\n- faire des retraits programmés sur notre assurance-vie pour compléter les pensions\n- revoir tous nos contrats d'assurance, qui n'étaient plus adaptés\n\nUn an après, nous sommes sereins. Le plus important a été d'en parler à deux, chiffres sur la table.",
+   "comments": [
+    {
+     "author": "Bertrand59",
+     "content": "Très utile, je garde ça pour dans quelques années. Les retraits programmés, c'est intéressant fiscalement ?",
+     "useful": 4,
+     "minutesAgo": 2033
+    },
+    {
+     "author": "Nadia.Patrimoine",
+     "content": "@Bertrand59 Seule la part de gains contenue dans chaque retrait est imposable, pas le capital versé. Et après huit ans de contrat, un abattement annuel s'applique en plus sur ces gains.",
+     "useful": 12,
+     "minutesAgo": 1186
+    }
+   ]
+  },
+  {
+   "author": "Karim_Immo",
+   "category": "immobilier",
+   "minutesAgo": 12960,
+   "useful": 27,
+   "views": 960,
+   "title": "Mon troisième investissement locatif, du compromis à la première location",
+   "content": "Après deux studios, j'ai acheté l'an dernier un deux-pièces dans une ville moyenne. Je raconte les étapes, avec ce que je referais et ce que je changerais.\n\n**La recherche.** Trois mois de visites. J'ai écarté tous les biens au diagnostic énergétique médiocre : les travaux de rénovation et les restrictions de location à venir m'auraient coûté cher.\n\n**Le financement.** J'ai fait jouer la concurrence entre trois banques, avec l'aide d'un courtier. L'assurance emprunteur a fait une vraie différence sur le coût total.\n\n**La mise en location.** Une annonce avec de bonnes photos, des visites groupées, un dossier complet exigé : le logement a été loué en dix jours.\n\nCe que je changerais : prévoir une marge plus large pour les petits travaux, qui ont dépassé mon budget.",
+   "comments": [
+    {
+     "author": "Helene_R",
+     "content": "Merci pour le point sur le diagnostic énergétique, je l'avais sous-estimé.",
+     "useful": 5,
+     "minutesAgo": 7560
+    }
+   ]
+  },
+  {
+   "author": "Camille_B",
+   "category": "retraite",
+   "minutesAgo": 17280,
+   "useful": 19,
+   "views": 540,
+   "title": "Aider ses parents à préparer leur retraite : notre méthode en famille",
+   "content": "Mes parents partent à la retraite l'an prochain. Ils se sentaient un peu perdus, alors nous avons pris le sujet en main ensemble, en trois étapes.\n\n**1. Rassembler les informations.** Relevés de carrière, contrats d'épargne, assurances : nous avons tout réuni dans un même dossier.\n\n**2. Vérifier les relevés de carrière.** Nous y avons trouvé deux périodes manquantes, que mes parents ont fait corriger auprès de leur caisse.\n\n**3. Faire une simulation.** Le simulateur officiel leur a donné une première estimation de leurs pensions. Ils ont ensuite pris rendez-vous avec un conseiller pour affiner.\n\nLe plus précieux, finalement : en parler tôt, sans tabou.",
+   "comments": [
+    {
+     "author": "Odile.Retraite",
+     "content": "Bravo, c'est exactement ce qu'il faut faire. La vérification du relevé de carrière est souvent négligée.",
+     "useful": 7,
+     "minutesAgo": 10080
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "title": "Le Revenu répond : vos questions sur l'assurance-vie",
+   "host": "La rédaction du Revenu",
+   "inDays": 3,
+   "hour": 18,
+   "minute": 30,
+   "going": 142,
+   "category": "assurance-vie",
+   "attending": [
+    "Camille_B"
+   ]
+  },
+  {
+   "title": "Atelier débutants : construire son premier portefeuille",
+   "host": "La rédaction et des membres experts",
+   "inDays": 10,
+   "hour": 19,
+   "minute": 0,
+   "going": 87,
+   "category": "bourse",
+   "attending": []
+  },
+  {
+   "title": "Le Revenu répond : préparer sa retraite",
+   "host": "La rédaction du Revenu",
+   "inDays": 17,
+   "hour": 18,
+   "minute": 30,
+   "going": 63,
+   "category": "retraite",
+   "attending": []
+  }
+ ],
+ "notifications": [
+  {
+   "recipient": "Camille_B",
+   "kind": "reply",
+   "actor": "LaRedaction",
+   "topic": 18,
+   "badge": null,
+   "text": "a répondu dans une discussion que vous suivez",
+   "minutesAgo": 35,
+   "read": false
+  },
+  {
+   "recipient": "Camille_B",
+   "kind": "like",
+   "actor": "Odile.Retraite",
+   "topic": 18,
+   "badge": null,
+   "text": "et 4 autres membres ont trouvé votre réponse utile",
+   "minutesAgo": 90,
+   "read": false
+  },
+  {
+   "recipient": "Camille_B",
+   "kind": "mention",
+   "actor": "Vincent_ETF",
+   "topic": 10,
+   "badge": null,
+   "text": "vous a mentionnée dans « PER : vos retours d'expérience… »",
+   "minutesAgo": 240,
+   "read": false
+  },
+  {
+   "recipient": "Camille_B",
+   "kind": "badge",
+   "actor": null,
+   "topic": null,
+   "badge": "citoyen",
+   "text": "Nouveau badge : Votre avis compte",
+   "minutesAgo": 1560,
+   "read": true
+  },
+  {
+   "recipient": "Camille_B",
+   "kind": "event",
+   "actor": null,
+   "topic": null,
+   "badge": null,
+   "text": "Rappel : « Le Revenu répond » sur l'assurance-vie dans 3 jours",
+   "minutesAgo": 1800,
+   "read": true
+  }
+ ],
+ "follows": [
+  {
+   "user": "Camille_B",
+   "topic": 18
+  }
+ ],
+ "siteArticles": [
+  {
+   "kicker": "Diversifier vos placements",
+   "title": "Fonds euros : les rendements servis par les assureurs",
+   "paid": true,
+   "url": "https://www.lerevenu.com",
+   "position": 0
+  },
+  {
+   "kicker": "Réussir en Bourse",
+   "title": "Les valeurs à surveiller cette semaine",
+   "paid": true,
+   "url": "https://www.lerevenu.com",
+   "position": 1
+  },
+  {
+   "kicker": "Réduire vos impôts",
+   "title": "Déclaration de revenus : les cases à ne pas oublier",
+   "paid": false,
+   "url": "https://www.lerevenu.com",
+   "position": 2
+  }
+ ],
+ "charter": {
+  "title": "La charte de la communauté",
+  "intro": "Sept règles simples pour que les échanges restent utiles, sûrs et agréables. Elles se lisent en deux minutes.",
+  "rules": [
+   [
+    "Bienveillance",
+    "On débat des idées, jamais des personnes. Les débutants sont les bienvenus : aucune question n'est bête."
+   ],
+   [
+    "Expérience, pas conseil personnalisé",
+    "Partagez ce que vous faites et pourquoi. Chacun reste responsable de ses décisions d'investissement."
+   ],
+   [
+    "Pas de sollicitation",
+    "Aucune promotion de produit, de parrainage ou de service payant."
+   ],
+   [
+    "Des liens vers des sources fiables",
+    "Pour éviter la publicité déguisée, seuls les liens vers lerevenu.com et les sources officielles (sites publics, AMF, Banque de France, Insee, Cour des comptes) sont acceptés. Les autres liens sont réservés aux membres confirmés et vérifiés par la modération avant d'être cliquables."
+   ],
+   [
+    "Pas de rumeurs de marché",
+    "Les « tuyaux » non sourcés et les incitations à acheter ou vendre un titre sont supprimés."
+   ],
+   [
+    "Protégez-vous",
+    "Un pseudonyme suffit pour participer : seuls les professionnels vérifiés apparaissent sous leur nom. Ne publiez jamais vos coordonnées bancaires, numéros de contrat ou informations permettant de vous identifier."
+   ],
+   [
+    "Signalez plutôt que répondre",
+    "Un message vous semble problématique ? Utilisez « Signaler » : l'équipe de modération intervient rapidement."
+   ]
+  ]
+ }
+}

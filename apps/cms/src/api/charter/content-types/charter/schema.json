@@ -1,0 +1,26 @@
+{
+  "kind": "singleType",
+  "collectionName": "charters",
+  "info": {
+    "singularName": "charter",
+    "pluralName": "charters",
+    "displayName": "Charter",
+    "description": "Community charter shown on /charte"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "intro": {
+      "type": "text"
+    },
+    "rules": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

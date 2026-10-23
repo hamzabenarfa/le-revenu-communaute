@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": "« Le Revenu répond » live session"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 150
+    },
+    "host": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "startsAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category"
+    },
+    "attendees": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "goingBase": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    }
+  }
+}

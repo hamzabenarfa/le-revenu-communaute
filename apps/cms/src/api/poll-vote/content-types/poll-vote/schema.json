@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "poll_votes",
+  "info": {
+    "singularName": "poll-vote",
+    "pluralName": "poll-votes",
+    "displayName": "Poll vote",
+    "description": "One member vote in a poll"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "discussion": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discussion.discussion"
+    },
+    "option": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "key": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "private": true
+    }
+  }
+}

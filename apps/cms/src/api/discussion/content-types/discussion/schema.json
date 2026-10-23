@@ -1,0 +1,102 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discussions",
+  "info": {
+    "singularName": "discussion",
+    "pluralName": "discussions",
+    "displayName": "Discussion",
+    "description": "A question or discussion started by a community member"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "minLength": 10,
+      "maxLength": 150
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "unique": true
+    },
+    "content": {
+      "type": "text",
+      "required": true,
+      "maxLength": 10000
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "question",
+        "discussion",
+        "poll"
+      ],
+      "required": true,
+      "default": "question"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "discussions"
+    },
+    "replies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reply.reply",
+      "mappedBy": "discussion"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "featured": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "question",
+        "poll"
+      ],
+      "default": "none"
+    },
+    "articleTitle": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "pollOptions": {
+      "type": "json"
+    },
+    "solution": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::reply.reply"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "replyCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "usefulCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "lastActivityAt": {
+      "type": "datetime"
+    }
+  }
+}

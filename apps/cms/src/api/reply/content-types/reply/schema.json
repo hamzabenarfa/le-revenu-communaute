@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "replies",
+  "info": {
+    "singularName": "reply",
+    "pluralName": "replies",
+    "displayName": "Reply",
+    "description": "An answer posted under a discussion"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "content": {
+      "type": "text",
+      "required": true,
+      "maxLength": 5000
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "discussion": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discussion.discussion",
+      "inversedBy": "replies"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "usefulCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    }
+  }
+}

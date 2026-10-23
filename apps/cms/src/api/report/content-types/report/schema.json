@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reports",
+  "info": {
+    "singularName": "report",
+    "pluralName": "reports",
+    "displayName": "Report",
+    "description": "Moderation report sent by a member"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "reporter": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "reason": {
+      "type": "enumeration",
+      "enum": [
+        "disrespect",
+        "solicitation",
+        "market-rumor",
+        "personal-data",
+        "other"
+      ],
+      "required": true
+    },
+    "targetType": {
+      "type": "enumeration",
+      "enum": [
+        "discussion",
+        "reply",
+        "post",
+        "comment"
+      ],
+      "required": true
+    },
+    "targetId": {
+      "type": "string",
+      "required": true,
+      "maxLength": 64
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "open",
+        "reviewed",
+        "dismissed"
+      ],
+      "default": "open"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "usefuls",
+  "info": {
+    "singularName": "useful",
+    "pluralName": "usefuls",
+    "displayName": "Useful",
+    "description": "One member marking a message as useful"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "targetAuthor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "targetType": {
+      "type": "enumeration",
+      "enum": [
+        "discussion",
+        "reply",
+        "post",
+        "comment"
+      ],
+      "required": true
+    },
+    "targetId": {
+      "type": "string",
+      "required": true,
+      "maxLength": 64
+    },
+    "key": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "private": true
+    }
+  }
+}

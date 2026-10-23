@@ -1,0 +1,29 @@
+'use strict';
+
+/**
+ * Loads Strapi without starting the HTTP server and runs the idempotent demo seed.
+ * Usage: npm run seed            (idempotent)
+ *        npm run seed -- --reset (wipe demo content and rebuild it)
+ */
+const { compileStrapi, createStrapi } = require('@strapi/strapi');
+
+async function main() {
+  const password = process.env.SEED_USER_PASSWORD;
+  if (!password || password.length < 8) {
+    throw new Error('Set SEED_USER_PASSWORD (min. 8 characters) in apps/cms/.env before seeding.');
+  }
+
+  const appContext = await compileStrapi();
+  const app = await createStrapi(appContext).load();
+  try {
+    const { seedDemo } = require('../dist/src/seed');
+    await seedDemo(app, password, { reset: process.argv.includes('--reset') });
+  } finally {
+    await app.destroy();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

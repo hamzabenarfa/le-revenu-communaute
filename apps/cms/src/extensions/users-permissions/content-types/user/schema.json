@@ -1,0 +1,139 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "User"
+  },
+  "options": {
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users",
+      "configurable": false
+    },
+    "displayName": {
+      "type": "string",
+      "maxLength": 24
+    },
+    "bio": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "avatarColor": {
+      "type": "string",
+      "regex": "^#[0-9a-fA-F]{6}$"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "memberRole": {
+      "type": "enumeration",
+      "enum": [
+        "member",
+        "redaction",
+        "moderator"
+      ],
+      "default": "member",
+      "required": true
+    },
+    "subscriber": {
+      "type": "boolean",
+      "default": false
+    },
+    "proTitle": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "interests": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category"
+    },
+    "onboarded": {
+      "type": "boolean",
+      "default": false
+    },
+    "streak": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "visitDays": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "lastVisitOn": {
+      "type": "date"
+    },
+    "basePoints": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "baseMonthPoints": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    }
+  }
+}

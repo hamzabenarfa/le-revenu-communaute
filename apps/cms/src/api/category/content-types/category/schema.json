@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categories",
+  "info": {
+    "singularName": "category",
+    "pluralName": "categories",
+    "displayName": "Category",
+    "description": "Thematic space grouping discussions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 80
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true,
+      "unique": true
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "color": {
+      "type": "string",
+      "regex": "^#[0-9a-fA-F]{6}$",
+      "default": "#6e6e73"
+    },
+    "discussions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::discussion.discussion",
+      "mappedBy": "category"
+    },
+    "icon": {
+      "type": "string",
+      "maxLength": 24,
+      "default": "msg"
+    },
+    "rubrique": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "position": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
