@@ -25,7 +25,11 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+// Exit explicitly: a late pool acquisition after destroy() can otherwise keep the process alive and crash it.
+main().then(
+  () => process.exit(0),
+  (error) => {
+    console.error(error);
+    process.exit(1);
+  },
+);

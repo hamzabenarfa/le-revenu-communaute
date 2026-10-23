@@ -1,10 +1,22 @@
 # Installation and configuration
 
-## Prerequisites
+## With Docker only (recommended to try it)
+
+```bash
+docker compose up --build      # http://localhost:3000, Strapi admin at http://localhost:1337/admin
+```
+
+Compose starts PostgreSQL, then Strapi (which seeds the demo data and creates the admin account on each start; both steps are idempotent), then Next.js. The web container runs `next build` on its first start, because the build prerenders pages from the live CMS; restarts reuse that build. Every variable has a local-demo default in `docker-compose.yml`; override any of them in a root `.env` (`APP_KEYS`, `JWT_SECRET`, `SEED_USER_PASSWORD`, `ADMIN_PASSWORD`, `WEB_PORT`, `CMS_PORT`, `DATABASE_PORT`...). Set `SEED_ON_START=false` on the `cms` service to skip seeding.
+
+After changing the code, run `docker compose up --build` again. `docker compose down -v` deletes the data.
+
+## Local development
+
+### Prerequisites
 
 Node.js 20–26, npm 10+, bun 1.4, Docker with Compose v2.
 
-## Steps
+### Steps
 
 ```bash
 git clone https://github.com/hamzabenarfa/le-revenu-communaute.git && cd le-revenu-communaute
@@ -68,3 +80,4 @@ Production: `npm run build && npm run start` in `apps/cms`, and `bun run build &
 | CMS tests: "Unknown error" from `load-config-file` | `strapi develop` was rebuilding `dist/`; rerun |
 | Demo data looks off | `npm run seed -- --reset` |
 | Port 5433 busy | Change `DATABASE_PORT` in both `.env` files |
+| Port 1337 or 3000 busy (Docker) | `CMS_PORT=1338 WEB_PORT=3001 docker compose up --build`, or stop the local `npm run develop` / `bun run dev` |

@@ -25,7 +25,7 @@ cd le-revenu-communaute
 docker compose up --build
 ```
 
-The first start takes a few minutes: it builds both images, creates the database schema and loads the demo data. It is ready when the `web` container logs `Ready`. Then open:
+The first run takes a few minutes: it builds both images, creates the database schema, loads the demo data and builds the Next.js app. It is ready when the `web` container logs `✓ Ready`. Then open:
 
 | What | URL | Login |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ cp .env.example .env && docker compose up -d db                       # PostgreS
 cd apps/cms && cp .env.example .env && npm install
 npm run seed && npm run develop                                        # Strapi on :1337
 
-cd apps/web && cp .env.example .env.local && bun install && bun run dev  # App on :3000 (another terminal)
+cd ../web && cp .env.example .env.local && bun install && bun run dev  # App on :3000 (another terminal)
 ```
 
 Stop the `cms` and `web` containers first if the full stack is running (`docker compose stop cms web`). Full setup and every environment variable: [docs/INSTALL.md](docs/INSTALL.md).
