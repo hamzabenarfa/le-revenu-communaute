@@ -11,9 +11,10 @@ Every response uses the Strapi v5 envelope. A success is `{ data, meta? }`. An e
 | Method & path | Auth | Body / query | Response |
 | --- | --- | --- | --- |
 | `GET /discussions` | public | `tab=new\|hot\|unanswered\|foryou` (`foryou` falls back to `hot` for visitors or members without interests), `category=<slug>`, `sort=desc\|asc` (`new`/`unanswered`), `page`, `pageSize` (≤50) | Cards + `meta: { tab, unanswered, pagination }`. 404 for an unknown category, 400 for malformed parameters |
-| `GET /discussions/slug/:slug` | public | | Detail: content, poll, `replies[]` (author with level, `usefulCount`, `verified`, `isSolution`, `liked`, `mine`), `related[]`, `participants[]`, `usefulTotal`, `viewer { liked, followed, myVote, isAuthor, canSolve, staff }`, `seo` (staff only). Counts a view |
+| `GET /discussions/slug/:slug` | public | | Detail: content, poll, `replies[]` (author with level, `usefulCount`, `verified`, `isSolution`, `liked`, `mine`), `related[]`, `participants[]`, `usefulTotal`, `viewer { liked, followed, myVote, isAuthor, canSolve, staff }`, `indexable` (public robots decision), `seo` details (staff only). Counts a view |
 | `GET /discussions/featured` | public | | `{ question, poll }` of the week (poll with options and `myVote`) |
 | `GET /discussions/similar?q=` | public | | Up to 3 `{ title, slug, replyCount, solved }` |
+| `GET /discussions/sitemap` | public | | Indexable discussions only, `{ slug, lastModified }` (max 5,000) |
 | `GET /search?q=` | public | `q` ≤100 | Cards (title, content or reply match) |
 | `POST /discussions` | member | `{ data: { title, content, type, category: <documentId>, pollOptions?: string[] } }` | 201 `{ data: <detail>, reward }` |
 | `PUT /discussions/:documentId/solution` | question author or staff | `{ data: { reply: <documentId> \| null } }` | `{ data: { solution }, meta: { author } }`. 403 for other members, 400 for your own reply or a non-question, 404 for a reply from another discussion |

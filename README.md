@@ -91,6 +91,7 @@ Browser ──▶ Next.js (Server Components + Server Actions) ──REST + JWT�
 - **Permissions as code**, synced at every boot. Real PostgreSQL unique indexes, row-locked poll counts, upload type checked from the file's bytes.
 - **The prototype's design system, ported as-is** (one CSS layer, same class names), so the screens match it, dark mode included.
 - **Next 16 Cache Components:** a static shell, data streamed behind Suspense, nothing member-specific cached.
+- **SEO driven by the editorial rule.** Strapi decides which discussions are worth indexing (best answer, newsroom or expert input, or enough "Utile"; never the Café). The same rule sets the page's `noindex` and filters `sitemap.xml`. Pages carry canonical URLs (feed tabs and pages are query variants), Open Graph and Twitter cards, a generated share image, and JSON-LD (`QAPage` for answered questions, `DiscussionForumPosting` otherwise, `BreadcrumbList`). Forms, sign-in and search are `noindex` and disallowed in `robots.txt`. Set `SITE_URL` to the public origin.
 
 Details: [architecture and decisions](docs/ARCHITECTURE.md) · [data model](docs/DATA-MODEL.md) · [API](docs/API.md) · [security](docs/SECURITY.md) · [design](docs/DESIGN.md).
 
@@ -100,7 +101,7 @@ The tests run on your machine against the Docker database (`docker compose up -d
 
 ```bash
 cd apps/cms && npm test      # 156 tests: unit + integration against a real Strapi and PostgreSQL
-cd apps/web && bun run test  # 28 tests: Vitest + Testing Library
+cd apps/web && bun run test  # 38 tests: Vitest + Testing Library
 ```
 
 The suites cover:

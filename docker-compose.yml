@@ -67,6 +67,8 @@ services:
     restart: unless-stopped
     environment:
       STRAPI_URL: http://cms:1337
+      # Public origin for canonical URLs, sitemap.xml and Open Graph.
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
     ports:
       - "${WEB_PORT:-3000}:3000"
     depends_on:
