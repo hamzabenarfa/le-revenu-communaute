@@ -1,5 +1,6 @@
 # dependencies & build output (each app also has its own .gitignore)
 node_modules/
+.next/
 .DS_Store
 *.pem
 npm-debug.log*
@@ -7,3 +8,4 @@ npm-debug.log*
 # env files: only the examples are committed
 .env*
 !.env.example
+.neon

@@ -7,6 +7,9 @@ import type { Core } from '@strapi/strapi';
  */
 export async function setupStrapi(): Promise<Core.Strapi> {
   process.env.DATABASE_NAME = process.env.TEST_DATABASE_NAME ?? 'lerevenu_test';
+  // A connection string would override DATABASE_NAME and point the suite (which wipes
+  // community data) at a hosted database such as Neon.
+  delete process.env.DATABASE_URL;
   process.env.STRAPI_TELEMETRY_DISABLED = 'true';
   // Tests write in bursts; the throttle itself is covered by tests/unit/rate-limit.test.ts.
   process.env.COMMUNITY_WRITE_LIMIT = process.env.COMMUNITY_WRITE_LIMIT ?? '100000';

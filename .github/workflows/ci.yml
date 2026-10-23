@@ -1,0 +1,90 @@
+# CI: lint, typecheck and test both apps on every push and pull request.
+# CD is handled by the hosts: Render redeploys the CMS once these checks pass on main
+# (render.yaml, autoDeployTrigger: checksPass) and Vercel deploys the web app from Git.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run test
+
+  cms:
+    name: CMS (Strapi)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/cms
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: strapi
+          POSTGRES_PASSWORD: strapi
+          POSTGRES_DB: lerevenu_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U strapi -d lerevenu_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    # Throwaway values for the CI database only.
+    env:
+      APP_KEYS: ciKey1,ciKey2
+      API_TOKEN_SALT: ciApiTokenSalt
+      ADMIN_JWT_SECRET: ciAdminJwtSecret
+      TRANSFER_TOKEN_SALT: ciTransferTokenSalt
+      JWT_SECRET: ciJwtSecret
+      ENCRYPTION_KEY: ciEncryptionKey
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+      DATABASE_SSL: "false"
+      TEST_DATABASE_NAME: lerevenu_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/cms/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+
+  docker:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build apps/cms
+      - run: docker build apps/web

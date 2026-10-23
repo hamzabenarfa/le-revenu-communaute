@@ -59,6 +59,7 @@ Production: `npm run build && npm run start` in `apps/cms`, and `bun run build &
 | `APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`, `ENCRYPTION_KEY` | Secrets. Must be replaced |
 | `JWT_EXPIRES_IN` | Member token lifetime (`7d`) |
 | `DATABASE_*` | PostgreSQL connection (matches Compose) |
+| `DATABASE_URL` | Optional. A full connection string (e.g. Neon's direct one) that overrides the `DATABASE_HOST`/`PORT`/`NAME`/credentials values. Ignored by the test suite |
 | `TEST_DATABASE_NAME` | Integration-test database (`lerevenu_test`) |
 | `SEED_USER_PASSWORD` | Password of every seeded member (min. 8) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Admin account created by `npm run admin:create` (8+ characters, with an uppercase letter, a lowercase letter and a digit) |

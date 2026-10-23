@@ -2,7 +2,7 @@
 
 > The reader community of *Le Revenu*, a French personal-finance magazine. Readers ask money questions, share experience and talk with the newsroom. Built with **Next.js 16**, **Strapi v5** and **PostgreSQL**.
 
-![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs) ![React 19](https://img.shields.io/badge/React-19-149eca?logo=react) ![Strapi v5](https://img.shields.io/badge/Strapi-v5-4945ff?logo=strapi) ![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript) ![Tests](https://img.shields.io/badge/tests-184%20passing-2ea44f)
+![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs) ![React 19](https://img.shields.io/badge/React-19-149eca?logo=react) ![Strapi v5](https://img.shields.io/badge/Strapi-v5-4945ff?logo=strapi) ![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript) ![Tests](https://img.shields.io/badge/tests-184%20passing-2ea44f) [![CI](https://github.com/hamzabenarfa/le-revenu-communaute/actions/workflows/ci.yml/badge.svg)](https://github.com/hamzabenarfa/le-revenu-communaute/actions/workflows/ci.yml)
 
 This is a full-stack technical test: it turns an interactive HTML prototype into a structured, maintainable application. **Every screen and use case of the prototype works against a real API.** Nothing is simulated in the browser.
 
@@ -69,6 +69,41 @@ cd ../web && cp .env.example .env.local && bun install && bun run dev  # App on 
 ```
 
 Stop the `cms` and `web` containers first if the full stack is running (`docker compose stop cms web`). Full setup and every environment variable: [docs/INSTALL.md](docs/INSTALL.md).
+
+## Deploy for free (demo, not production)
+
+Strapi needs a long-running server, so it cannot run on Vercel. The free setup splits the stack over three hosts:
+
+| Part | Host | Config |
+| --- | --- | --- |
+| Next.js (`apps/web`) | Vercel (Hobby) | Root Directory `apps/web` |
+| Strapi (`apps/cms`) | Render (free web service, Docker) | [`render.yaml`](render.yaml) |
+| PostgreSQL | Neon (free) | [`neon.ts`](neon.ts) |
+
+**1. Neon.** Create a project (or `neon init` / `neon deploy` with the [Neon CLI](https://neon.com/docs/cli)) and copy the **direct** connection string, the one whose host has no `-pooler`. Strapi runs its schema migrations at boot and keeps its own pool, so it does not go through Neon's pooler.
+
+**2. Render.** *New → Blueprint*, pick this repository: `render.yaml` creates the `lerevenu-cms` service and generates the Strapi secrets. Render then asks for:
+
+| Variable | Value |
+| --- | --- |
+| `DATABASE_URL` | The Neon direct connection string |
+| `SEED_USER_PASSWORD` | Password of the demo members (8+ chars) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Strapi admin account (8+ chars, upper, lower, digit) |
+
+The first start creates the schema, the demo data and the admin account. Check `https://<service>.onrender.com/_health` returns `204`, then set `SEED_ON_START=false` for faster restarts.
+
+**3. Vercel.** *Add New → Project*, import this repository, set **Root Directory** to `apps/web`, and add:
+
+| Variable | Value |
+| --- | --- |
+| `STRAPI_URL` | `https://<service>.onrender.com` |
+| `SITE_URL` | The Vercel URL, e.g. `https://<project>.vercel.app` |
+
+`next build` prerenders pages from live Strapi data. Open the Render URL first so the CMS is awake when Vercel builds.
+
+**Limits of the free plans.** Render puts the CMS to sleep after 15 minutes without traffic, so the first request after a pause takes about a minute. Files uploaded through Strapi are stored on Render's disk and are lost on each redeploy (the demo data lives in Neon and is kept). Free tiers change: check each host's pricing page.
+
+**CI/CD.** [GitHub Actions](.github/workflows/ci.yml) lints, typechecks and tests both apps (the CMS against a PostgreSQL service) and builds the Docker images on every push and pull request. Vercel deploys `main` and every pull request preview; Render redeploys the CMS only once those checks pass on `main`.
 
 ## Features
 
