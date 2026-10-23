@@ -101,7 +101,7 @@ Strapi creates the schema on its first start. On a new, empty database, set `SEE
 
 `next build` prerenders pages from live Strapi data. Open the Render URL first so the CMS is awake when Vercel builds.
 
-**Limits of the free plans.** Render puts the CMS to sleep after 15 minutes without traffic, so the first request after a pause takes about a minute. Files uploaded through Strapi are stored on Render's disk and are lost on each redeploy (the demo data lives in Neon and is kept). Free tiers change: check each host's pricing page.
+**Limits of the free plans.** Render puts the CMS to sleep after 15 minutes without traffic, so the first request after a pause takes about a minute. The [Keep CMS warm](.github/workflows/keep-warm.yml) workflow pings `/_health` every 10 minutes to prevent that; a service awake all month uses about 744 of the 750 free instance hours Render grants per workspace, so disable the workflow if another free service shares them. Set the `CMS_URL` repository variable if the Render URL differs from `https://lerevenu-cms.onrender.com`. Files uploaded through Strapi are stored on Render's disk and are lost on each redeploy (the demo data lives in Neon and is kept). Free tiers change: check each host's pricing page.
 
 **CI/CD.** [GitHub Actions](.github/workflows/ci.yml) lints, typechecks and tests both apps (the CMS against a PostgreSQL service) and builds the Docker images on every push and pull request. Vercel deploys `main` and every pull request preview; Render redeploys the CMS only once those checks pass on `main`.
 

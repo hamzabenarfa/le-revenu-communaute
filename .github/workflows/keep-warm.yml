@@ -1,0 +1,25 @@
+# Keep the Strapi CMS awake: Render's free plan sleeps after 15 idle minutes, and a
+# cold start takes longer than the web app's 8 s request timeout.
+# GitHub may delay scheduled runs by a few minutes, hence a 10-minute interval.
+name: Keep CMS warm
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    name: Ping /_health
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      # A sleeping instance can take about a minute to answer: retry instead of failing.
+      - run: >
+          curl --fail --silent --show-error --output /dev/null
+          --max-time 90 --retry 3 --retry-delay 10 --retry-all-errors
+          "${CMS_URL}/_health"
+        env:
+          CMS_URL: ${{ vars.CMS_URL || 'https://lerevenu-cms.onrender.com' }}
