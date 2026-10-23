@@ -3,7 +3,7 @@ import { type ReactNode, Suspense } from "react";
 import { getCurrentUser } from "@/lib/session";
 import { StrapiError } from "@/lib/strapi/errors";
 import { listSpaces } from "@/lib/strapi/spaces";
-import type { Space } from "@/lib/strapi/types";
+import type { Me, Space } from "@/lib/strapi/types";
 import { AppProvider } from "./app/app-context";
 import { BottomNav } from "./app/bottom-nav";
 import { HeaderActions } from "./app/header-actions";
@@ -119,8 +119,13 @@ export function Header({ withActions = true }: { withActions?: boolean }) {
 
 /** Loads the member and the spaces once per request, then mounts the interactive app around the page. */
 export async function SessionBoundary({ children }: { children: ReactNode }) {
+  // The root layout must not fail when Strapi is unreachable (e.g. a cold start):
+  // render the shell signed out and empty, and let the page's error boundary report it.
   const [me, spaces] = await Promise.all([
-    getCurrentUser(),
+    getCurrentUser().catch((error: unknown): Me | null => {
+      if (error instanceof StrapiError) return null;
+      throw error;
+    }),
     listSpaces().catch((error: unknown): Space[] => {
       if (error instanceof StrapiError) return [];
       throw error;
