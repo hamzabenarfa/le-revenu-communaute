@@ -7,7 +7,10 @@ import { FeedSkeleton } from "@/components/skeletons";
 import { getCharter } from "@/lib/strapi/community";
 import { StrapiError } from "@/lib/strapi/errors";
 
-export const metadata: Metadata = { title: "La charte de la communauté" };
+export const metadata: Metadata = {
+  title: "La charte de la communauté",
+  alternates: { canonical: "/charte" },
+};
 
 async function Charter() {
   // Every view is rendered per request (relative dates, member-specific state).

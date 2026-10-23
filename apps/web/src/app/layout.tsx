@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Suspense } from "react";
 import { SessionBoundary, ShellFallback } from "@/components/shell";
+import { openGraph, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -15,14 +16,23 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const description =
+  "Posez vos questions d'argent, partagez vos expériences et échangez avec la rédaction du Revenu.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
-    default: "Communauté Le Revenu",
-    template: "%s · Communauté Le Revenu",
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "Posez vos questions d'argent, partagez vos expériences et échangez avec la rédaction du Revenu.",
+  description,
+  openGraph: openGraph({ title: SITE_NAME, description }),
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
+
+export const viewport: Viewport = { themeColor: "#eb0f0f" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

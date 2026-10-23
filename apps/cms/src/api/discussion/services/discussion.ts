@@ -13,6 +13,8 @@ const EXCERPT_LENGTH = 220;
 const REPLIES_LIMIT = 200;
 const HOT_CANDIDATES = 300;
 const SEO_USEFUL = 25;
+/** Well under the 50,000 URLs a single sitemap file may hold. */
+const SITEMAP_LIMIT = 5000;
 const MENTION_RE = /@([A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*)/g;
 const STOP_WORDS = new Set(
   'pour dans avec comment quel quelle quels quelles faut vous nous mon mes une des les sur que qui plus faire avez bien encore entre leur votre vos mais pas sont cette ces être avoir tout après avant est'.split(' ')
@@ -184,6 +186,7 @@ export default factories.createCoreService(UID, ({ strapi }) => {
       if (participants.length === 4) break;
     }
     const replyCount = d.replyCount ?? 0;
+    const seo = seoStatus(d, own);
     return {
       documentId: d.documentId,
       title: d.title,
@@ -203,7 +206,9 @@ export default factories.createCoreService(UID, ({ strapi }) => {
       pollVotes: d.type === 'poll' ? pollTotal(d.pollOptions) : null,
       participants,
       isNew: minutesSince(d.publishedAt ?? d.createdAt) < 360 && replyCount === 0,
-      ...(viewer?.staff ? { seo: seoStatus(d, own) } : {}),
+      // Public: search engines read pages anonymously, so the robots decision cannot be staff-only.
+      indexable: seo.indexed,
+      ...(viewer?.staff ? { seo } : {}),
     };
   };
 
@@ -581,6 +586,25 @@ export default factories.createCoreService(UID, ({ strapi }) => {
     },
 
     /** "Ces discussions répondent peut-être déjà à votre question" while typing a title. */
+    /** Indexable discussions only (same editorial rule as the page's robots tag), for sitemap.xml. */
+    async sitemap() {
+      const rows = (await db().findMany({
+        select: ['id', 'slug', 'usefulCount', 'publishedAt', 'createdAt', 'lastActivityAt'],
+        populate: { author: PERSON_POPULATE, category: { select: ['slug'] }, solution: { select: ['id'] } },
+        orderBy: [{ lastActivityAt: 'desc' }, { id: 'desc' }],
+        limit: SITEMAP_LIMIT,
+      })) as DiscussionRow[];
+      const byDiscussion = new Map<number, ReplyRow[]>();
+      for (const r of await repliesOf(rows.map((d) => d.id))) {
+        if (r.discussion) byDiscussion.set(r.discussion.id, [...(byDiscussion.get(r.discussion.id) ?? []), r]);
+      }
+      return {
+        data: rows
+          .filter((d) => seoStatus(d, byDiscussion.get(d.id) ?? []).indexed)
+          .map((d) => ({ slug: d.slug, lastModified: toIso(d.lastActivityAt ?? d.publishedAt ?? d.createdAt) })),
+      };
+    },
+
     async similar(q: string) {
       const words = (q.toLowerCase().match(/[a-zà-ÿ0-9-]{3,}/g) ?? []).filter((w) => !STOP_WORDS.has(w)).slice(0, 8);
       if (!words.length) return { data: [] };

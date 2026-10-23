@@ -12,6 +12,7 @@ import { ComposeButton, EventsWidget } from "@/components/widgets";
 import { parseFeedFilters } from "@/lib/discussion-query";
 import { fmt } from "@/lib/format";
 import { getCurrentUser } from "@/lib/session";
+import { openGraph } from "@/lib/site";
 import { getEvents, getLeaderboard } from "@/lib/strapi/community";
 import { findSpace, listSpaces } from "@/lib/strapi/spaces";
 import type { Me } from "@/lib/strapi/types";
@@ -20,9 +21,17 @@ type Props = PageProps<"/espaces/[slug]">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const space = await findSpace((await params).slug).catch(() => null);
+  if (!space) return { title: "Espace" };
+  const path = `/espaces/${encodeURIComponent(space.slug)}`;
+  const description =
+    space.description ??
+    `Questions et discussions des lecteurs du Revenu : ${space.name}.`;
   return {
-    title: space?.name ?? "Espace",
-    description: space?.description ?? undefined,
+    title: space.name,
+    description,
+    // Tabs and pages are query variants of the same space.
+    alternates: { canonical: path },
+    openGraph: openGraph({ title: space.name, description, url: path }),
   };
 }
 

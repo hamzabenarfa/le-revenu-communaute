@@ -47,6 +47,7 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
   const role = await strapi.db.query('plugin::users-permissions.role').findOne({ where: { type: 'authenticated' } });
   const userService = strapi.plugin('users-permissions').service('user');
   const users = new Map<string, { id: number; documentId: string }>();
+  const newUsers = new Set<string>();
   for (const u of FIXTURE.users) {
     const email = demoEmail(u.username);
     let row = await strapi.db.query(USER).findOne({ where: { email }, select: ['id', 'documentId'] });
@@ -70,6 +71,7 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
         lastVisitOn: new Date().toISOString().slice(0, 10),
         interests: u.interests.map((slug: string) => categories.get(slug)?.documentId).filter(Boolean),
       });
+      newUsers.add(u.username);
     }
     users.set(u.username, { id: row.id, documentId: row.documentId });
   }
@@ -78,6 +80,7 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
   }
 
   const topics = new Map<number, number>();
+  const newTopics = new Set<number>();
   let created = 0;
   for (const t of FIXTURE.topics) {
     const slug = slugify(t.title);
@@ -103,6 +106,7 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
     });
     const id = doc.id as number;
     topics.set(t.key, id);
+    newTopics.add(t.key);
     const replyIds: number[] = [];
     for (const r of t.replies) {
       const reply = await strapi.documents('api::reply.reply').create({
@@ -160,28 +164,28 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
   const charter = await strapi.db.query('api::charter.charter').findOne({ select: ['id'] });
   if (!charter) await strapi.documents('api::charter.charter').create({ data: FIXTURE.charter as never });
 
-  if (created > 0) {
-    for (const f of FIXTURE.follows) {
-      const user = users.get(f.user);
-      const topic = topics.get(f.topic);
-      if (user && topic) await strapi.documents('api::follow.follow').create({ data: { key: `${user.id}:${topic}`, user: user.id, discussion: topic } as never });
-    }
-    for (const n of FIXTURE.notifications) {
-      const recipient = users.get(n.recipient);
-      if (!recipient) continue;
-      const doc = await strapi.documents('api::notification.notification').create({
-        data: {
-          recipient: recipient.id,
-          actor: n.actor ? users.get(n.actor)?.id : null,
-          kind: n.kind,
-          text: n.text,
-          badge: n.badge ?? null,
-          discussion: n.topic ? topics.get(n.topic) : null,
-          read: n.read,
-        } as never,
-      });
-      await backdate(strapi, 'api::notification.notification', doc.id as number, ago(n.minutesAgo));
-    }
+  // Follows and notifications only go with content created by this run: re-seeding never duplicates them.
+  for (const f of FIXTURE.follows) {
+    const user = users.get(f.user);
+    const topic = topics.get(f.topic);
+    if (user && topic && newTopics.has(f.topic))
+      await strapi.documents('api::follow.follow').create({ data: { key: `${user.id}:${topic}`, user: user.id, discussion: topic } as never });
+  }
+  for (const n of FIXTURE.notifications) {
+    const recipient = users.get(n.recipient);
+    if (!recipient || !(n.topic ? newTopics.has(n.topic) : newUsers.has(n.recipient))) continue;
+    const doc = await strapi.documents('api::notification.notification').create({
+      data: {
+        recipient: recipient.id,
+        actor: n.actor ? users.get(n.actor)?.id : null,
+        kind: n.kind,
+        text: n.text,
+        badge: n.badge ?? null,
+        discussion: n.topic ? topics.get(n.topic) : null,
+        read: n.read,
+      } as never,
+    });
+    await backdate(strapi, 'api::notification.notification', doc.id as number, ago(n.minutesAgo));
   }
 
   // Prototype totals include activity from before the platform: store the difference as a baseline.
@@ -199,5 +203,5 @@ export async function seedDemo(strapi: Core.Strapi, password: string, options: {
     });
   }
 
-  strapi.log.info(`[seed] ${FIXTURE.categories.length} spaces, ${users.size + 1} members, ${created} new discussions, ${FIXTURE.posts.length} posts`);
+  strapi.log.info(`[seed] ${FIXTURE.categories.length} spaces, ${users.size + 1} members, ${created} new discussions (${FIXTURE.topics.length} in total), ${FIXTURE.posts.length} posts`);
 }

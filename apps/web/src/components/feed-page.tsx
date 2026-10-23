@@ -71,75 +71,38 @@ export async function Feed({
     logged && !filters.category
       ? ["foryou", "hot", "new", "unanswered"]
       : ["hot", "new", "unanswered"];
-  const { pagination } = feed.meta;
   const unansweredTab = feed.meta.tab === "unanswered";
   return (
-    <>
-      <FeedSection
-        tabs={tabs.map((tab) => ({
-          tab,
-          href: feedHref({ category: filters.category, tab }, logged),
-        }))}
-        active={feed.meta.tab}
-        unanswered={feed.meta.unanswered}
-        discussions={feed.data}
-        inlinePoll={
-          !filters.category && inlinePoll && filters.page === 1 ? (
-            <PollWidget poll={inlinePoll} inline />
-          ) : undefined
-        }
-        emptyText={
-          unansweredTab
-            ? {
-                title: "Toutes les questions ont une réponse",
-                text: "Bravo à la communauté ! Revenez plus tard ou posez à votre tour une question.",
-              }
-            : {
-                title: "Rien ici pour l'instant",
-                text: "Lancez la première discussion de cet espace.",
-              }
-        }
-      />
-      {pagination.pageCount > 1 && (
-        <nav
-          aria-label="Pagination"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          {pagination.page > 1 ? (
-            <Link
-              className="btn btn-secondary btn-sm"
-              href={feedHref({ ...filters, page: pagination.page - 1 }, logged)}
-              rel="prev"
-            >
-              <Icon name="arrowL" />
-              Précédentes
-            </Link>
-          ) : (
-            <span />
-          )}
-          <span className="hint num">
-            Page {pagination.page} sur {pagination.pageCount}
-          </span>
-          {pagination.page < pagination.pageCount ? (
-            <Link
-              className="btn btn-secondary btn-sm"
-              href={feedHref({ ...filters, page: pagination.page + 1 }, logged)}
-              rel="next"
-            >
-              Suivantes
-              <Icon name="chev" />
-            </Link>
-          ) : (
-            <span />
-          )}
-        </nav>
-      )}
-    </>
+    <FeedSection
+      tabs={tabs.map((tab) => ({
+        tab,
+        href: feedHref({ category: filters.category, tab }, logged),
+      }))}
+      active={feed.meta.tab}
+      unanswered={feed.meta.unanswered}
+      discussions={feed.data}
+      paging={{
+        filters: { ...filters, tab: feed.meta.tab },
+        pagination: feed.meta.pagination,
+        logged,
+      }}
+      inlinePoll={
+        !filters.category && inlinePoll && filters.page === 1 ? (
+          <PollWidget poll={inlinePoll} inline />
+        ) : undefined
+      }
+      emptyText={
+        unansweredTab
+          ? {
+              title: "Toutes les questions ont une réponse",
+              text: "Bravo à la communauté ! Revenez plus tard ou posez à votre tour une question.",
+            }
+          : {
+              title: "Rien ici pour l'instant",
+              text: "Lancez la première discussion de cet espace.",
+            }
+      }
+    />
   );
 }
 

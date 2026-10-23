@@ -6,8 +6,9 @@ import { Layout } from "@/components/shell";
 import { FeedSkeleton } from "@/components/skeletons";
 import { safeRedirectPath } from "@/lib/form-state";
 import { getCurrentUser } from "@/lib/session";
+import { NO_INDEX } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Connexion" };
+export const metadata: Metadata = { title: "Connexion", robots: NO_INDEX };
 
 async function Login({
   searchParams,

@@ -10,7 +10,10 @@ import { FeedSkeleton } from "@/components/skeletons";
 import { getLeaderboard } from "@/lib/strapi/community";
 import { StrapiError } from "@/lib/strapi/errors";
 
-export const metadata: Metadata = { title: "Classement des contributeurs" };
+export const metadata: Metadata = {
+  title: "Classement des contributeurs",
+  alternates: { canonical: "/classement" },
+};
 
 async function Board({
   searchParams,

@@ -1,5 +1,29 @@
-# Local PostgreSQL for the Strapi CMS (dev + test databases).
-# Usage: docker compose up -d db
+# Whole stack:   docker compose up --build    → http://localhost:3000 (first start: a few minutes)
+# Database only: docker compose up -d db      → for local development with npm/bun (see docs/INSTALL.md)
+#
+# Every value has a local-demo default, so no .env file is needed. The secrets below are
+# public placeholders: override them (root .env) before running this anywhere but your machine.
+x-cms-env: &cms-env
+  HOST: 0.0.0.0
+  PORT: 1337
+  APP_KEYS: ${APP_KEYS:-demoKey1,demoKey2,demoKey3,demoKey4}
+  API_TOKEN_SALT: ${API_TOKEN_SALT:-demoApiTokenSalt}
+  ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-demoAdminJwtSecret}
+  TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-demoTransferTokenSalt}
+  JWT_SECRET: ${JWT_SECRET:-demoJwtSecret}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY:-demoEncryptionKey}
+  JWT_EXPIRES_IN: 7d
+  DATABASE_CLIENT: postgres
+  DATABASE_HOST: db
+  DATABASE_PORT: 5432
+  DATABASE_NAME: ${DATABASE_NAME:-lerevenu}
+  DATABASE_USERNAME: ${DATABASE_USERNAME:-strapi}
+  DATABASE_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+  DATABASE_SSL: "false"
+  SEED_USER_PASSWORD: ${SEED_USER_PASSWORD:-Demo-Revenu-2026}
+  ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@demo.fr}
+  ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin-Demo-2026}
+
 services:
   db:
     image: postgres:16-alpine
@@ -20,5 +44,35 @@ services:
       timeout: 5s
       retries: 10
 
+  cms:
+    build: ./apps/cms
+    restart: unless-stopped
+    environment: *cms-env
+    ports:
+      - "${CMS_PORT:-1337}:1337"
+    volumes:
+      - uploads:/app/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:1337/_health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 60s
+
+  web:
+    build: ./apps/web
+    restart: unless-stopped
+    environment:
+      STRAPI_URL: http://cms:1337
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      cms:
+        condition: service_healthy
+
 volumes:
   pgdata:
+  uploads:

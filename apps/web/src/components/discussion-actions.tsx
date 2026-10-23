@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   chooseSolution,
@@ -17,8 +16,10 @@ import {
   MentionTextarea,
   useCanPostExternal,
 } from "./app/mention-textarea";
-import { Avatar } from "./atoms";
+import { useActionMutation } from "./app/use-action-mutation";
+import { Avatar, type AvatarPerson } from "./atoms";
 import { Icon } from "./icon";
+import { Prose } from "./prose";
 
 type Target = "discussion" | "reply" | "post" | "comment";
 const REPLY_TO = "lr:reply-to";
@@ -39,24 +40,20 @@ export function UsefulButton({
   mine: boolean;
   firstHint?: string;
 }) {
-  const { requireLogin, handle, toast } = useApp();
+  const { requireLogin, toast } = useApp();
   const [state, setState] = useState({ liked, count });
   useEffect(() => setState({ liked, count }), [liked, count]);
-  const click = () =>
-    requireLogin(async () => {
-      if (mine) {
-        toast(
-          <>
-            <Icon name="thumb" />
-            <div>
-              Vous ne pouvez pas marquer votre propre message comme utile.
-            </div>
-          </>,
-        );
-        return;
-      }
-      const data = handle(await toggleUseful(targetType, targetId), click);
-      if (!data) return;
+  const toggle = useActionMutation(() => toggleUseful(targetType, targetId), {
+    onMutate: () => {
+      const before = state;
+      setState({
+        liked: !before.liked,
+        count: Math.max(0, before.count + (before.liked ? -1 : 1)),
+      });
+      return before;
+    },
+    onError: (_error, _vars, before) => before && setState(before),
+    onSuccess: (data) => {
       setState(data);
       if (data.liked && firstHint) {
         try {
@@ -76,6 +73,23 @@ export function UsefulButton({
           /* hint shown once per tab when storage works */
         }
       }
+    },
+  });
+  const click = () =>
+    requireLogin(() => {
+      if (mine) {
+        toast(
+          <>
+            <Icon name="thumb" />
+            <div>
+              Vous ne pouvez pas marquer votre propre message comme utile.
+            </div>
+          </>,
+        );
+        return;
+      }
+      // One toggle in flight at a time keeps the optimistic count exact.
+      if (!toggle.isPending) toggle.mutate();
     });
   return (
     <button
@@ -97,13 +111,16 @@ export function FollowButton({
   discussionId: string;
   followed: boolean;
 }) {
-  const { requireLogin, handle, toast } = useApp();
+  const { requireLogin, toast } = useApp();
   const [on, setOn] = useState(followed);
   useEffect(() => setOn(followed), [followed]);
-  const click = () =>
-    requireLogin(async () => {
-      const data = handle(await followDiscussion(discussionId), click);
-      if (!data) return;
+  const follow = useActionMutation(() => followDiscussion(discussionId), {
+    onMutate: () => {
+      setOn(!on);
+      return on;
+    },
+    onError: (_error, _vars, before) => before !== undefined && setOn(before),
+    onSuccess: (data) => {
       setOn(data.followed);
       toast(
         <>
@@ -120,6 +137,11 @@ export function FollowButton({
           </div>
         </>,
       );
+    },
+  });
+  const click = () =>
+    requireLogin(() => {
+      if (!follow.isPending) follow.mutate();
     });
   return (
     <button
@@ -210,37 +232,44 @@ export function SolveButton({
   replyId: string;
   isSolution: boolean;
 }) {
-  const { handle, toast } = useApp();
-  const router = useRouter();
-  const click = async () => {
-    const data = handle(
-      await chooseSolution(discussionId, isSolution ? null : replyId),
-      click,
-    );
-    if (!data) return;
-    router.refresh();
-    if (data.solution && data.author)
-      toast(
-        <>
-          <Icon name="check" />
-          <div>
-            <b>Meilleure réponse choisie</b>
-            <small>
-              {data.author} reçoit +20 points. Merci d&apos;avoir clôturé votre
-              question !
-            </small>
-          </div>
-        </>,
-      );
-  };
+  const { toast } = useApp();
+  const [on, setOn] = useState(isSolution);
+  useEffect(() => setOn(isSolution), [isSolution]);
+  // The action refreshes the page itself: flags, call-out and points follow.
+  const choose = useActionMutation(
+    () => chooseSolution(discussionId, on ? null : replyId),
+    {
+      onMutate: () => {
+        setOn(!on);
+        return on;
+      },
+      onError: (_error, _vars, before) => before !== undefined && setOn(before),
+      onSuccess: (data) => {
+        if (data.solution && data.author)
+          toast(
+            <>
+              <Icon name="check" />
+              <div>
+                <b>Meilleure réponse choisie</b>
+                <small>
+                  {data.author} reçoit +20 points. Merci d&apos;avoir clôturé
+                  votre question !
+                </small>
+              </div>
+            </>,
+          );
+      },
+    },
+  );
   return (
     <button
       type="button"
-      className={`act${isSolution ? " on-ok" : ""}`}
-      onClick={click}
+      className={`act${on ? " on-ok" : ""}`}
+      disabled={choose.isPending}
+      onClick={() => choose.mutate()}
     >
       <Icon name="check" />
-      {isSolution ? "Meilleure réponse" : "Choisir comme meilleure réponse"}
+      {on ? "Meilleure réponse" : "Choisir comme meilleure réponse"}
     </button>
   );
 }
@@ -252,34 +281,41 @@ export function VerifyButton({
   replyId: string;
   verified: boolean;
 }) {
-  const { handle, toast } = useApp();
-  const router = useRouter();
-  const click = async () => {
-    const data = handle(await verifyReply(replyId), click);
-    if (!data) return;
-    router.refresh();
-    if (data.verified)
-      toast(
-        <>
-          <Icon name="verified" />
-          <div>
-            <b>Réponse validée par la rédaction</b>
-            <small>
-              La mention s&apos;affiche sous la réponse et renforce son
-              référencement.
-            </small>
-          </div>
-        </>,
-      );
-  };
+  const { toast } = useApp();
+  const [on, setOn] = useState(verified);
+  useEffect(() => setOn(verified), [verified]);
+  const verify = useActionMutation(() => verifyReply(replyId), {
+    onMutate: () => {
+      setOn(!on);
+      return on;
+    },
+    onError: (_error, _vars, before) => before !== undefined && setOn(before),
+    onSuccess: (data) => {
+      setOn(data.verified);
+      if (data.verified)
+        toast(
+          <>
+            <Icon name="verified" />
+            <div>
+              <b>Réponse validée par la rédaction</b>
+              <small>
+                La mention s&apos;affiche sous la réponse et renforce son
+                référencement.
+              </small>
+            </div>
+          </>,
+        );
+    },
+  });
   return (
     <button
       type="button"
-      className={`act${verified ? " on-ok" : ""}`}
-      onClick={click}
+      className={`act${on ? " on-ok" : ""}`}
+      disabled={verify.isPending}
+      onClick={() => verify.mutate()}
     >
       <Icon name="verified" />
-      {verified ? "Vérifiée par la rédaction" : "Valider cette réponse"}
+      {on ? "Vérifiée par la rédaction" : "Valider cette réponse"}
     </button>
   );
 }
@@ -362,12 +398,10 @@ export function ReplyBox({
   >;
   successToast?: string;
 }) {
-  const { me, handle, toast } = useApp();
-  const router = useRouter();
+  const { me, toast } = useApp();
   const canPostExternal = useCanPostExternal();
   const draftKey = `lr-reply:${targetId}`;
   const [value, setValue] = useState("");
-  const [busy, setBusy] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -400,12 +434,55 @@ export function ReplyBox({
     return () => window.removeEventListener(REPLY_TO, onReplyTo);
   });
 
+  // The reply shows up at once; the action's refresh() then swaps in the stored one.
+  const send = useActionMutation((body: string) => publish(targetId, body), {
+    onMutate: () => update(""),
+    // Give the text back unless the member already started another message.
+    onError: (_error, body) => {
+      if (!ref.current?.value.trim()) update(body);
+    },
+    onSuccess: (data) => {
+      if (successToast)
+        toast(
+          <>
+            <Icon name="check" />
+            <div>{successToast}</div>
+          </>,
+        );
+      const mentioned = "mentioned" in data ? data.mentioned : [];
+      if (mentioned.length) {
+        const who =
+          mentioned.length > 1
+            ? `${mentioned.slice(0, -1).join(", ")} et ${mentioned[mentioned.length - 1]}`
+            : mentioned[0];
+        setTimeout(
+          () =>
+            toast(
+              <>
+                <Icon name="at" />
+                <div>
+                  <b>
+                    {who} {mentioned.length > 1 ? "recevront" : "recevra"} une
+                    notification
+                  </b>
+                  <small>Grâce à votre mention dans ce message.</small>
+                </div>
+              </>,
+            ),
+          1300,
+        );
+      }
+      if ("documentId" in data)
+        setTimeout(() => flash(`r-${data.documentId}`), 600);
+    },
+  });
+
   if (!me) return null;
 
-  const submit = async (e?: React.FormEvent) => {
+  const submit = (e?: React.FormEvent) => {
     e?.preventDefault();
     const body = value.trim();
-    if (body.length < 2) {
+    if (body.length < 2 || send.isPending) {
       ref.current?.focus();
       return;
     }
@@ -413,91 +490,87 @@ export function ReplyBox({
       ref.current?.focus();
       return;
     }
-    setBusy(true);
-    const result = await publish(targetId, body);
-    setBusy(false);
-    const data = handle(result, () => void submit());
-    if (!data) return;
-    update("");
-    router.refresh();
-    if (successToast)
-      toast(
-        <>
-          <Icon name="check" />
-          <div>{successToast}</div>
-        </>,
-      );
-    const mentioned = "mentioned" in data ? data.mentioned : [];
-    if (mentioned.length) {
-      const who =
-        mentioned.length > 1
-          ? `${mentioned.slice(0, -1).join(", ")} et ${mentioned[mentioned.length - 1]}`
-          : mentioned[0];
-      setTimeout(
-        () =>
-          toast(
-            <>
-              <Icon name="at" />
-              <div>
-                <b>
-                  {who} {mentioned.length > 1 ? "recevront" : "recevra"} une
-                  notification
-                </b>
-                <small>Grâce à votre mention dans ce message.</small>
-              </div>
-            </>,
-          ),
-        1300,
-      );
-    }
-    if ("documentId" in data)
-      setTimeout(() => flash(`r-${data.documentId}`), 600);
+    send.mutate(body);
   };
 
   return (
-    <form className="post reply-box" id="repondre" onSubmit={submit}>
-      <div className="author">
-        <Avatar person={me} size="sm" link={false} />
-        <div className="author-sub">
-          {verb} en tant que <b style={{ color: "var(--ink)" }}>{me.name}</b>
+    <>
+      {send.isPending && send.variables && (
+        <PendingReply author={me} text={send.variables} verb={verb} />
+      )}
+      <form className="post reply-box" id="repondre" onSubmit={submit}>
+        <div className="author">
+          <Avatar person={me} size="sm" link={false} />
+          <div className="author-sub">
+            {verb} en tant que <b style={{ color: "var(--ink)" }}>{me.name}</b>
+          </div>
         </div>
-      </div>
-      <label htmlFor="reply-body" className="sr-only">
-        {label}
-      </label>
-      <MentionTextarea
-        id="reply-body"
-        value={value}
-        onChange={update}
-        context={context}
-        placeholder={placeholder}
-        textareaRef={ref}
-        onSubmitShortcut={() => void submit()}
-      />
-      <LinkNote text={value} canPostExternal={canPostExternal} />
-      <div className="reply-foot">
-        <div className="tools">
+        <label htmlFor="reply-body" className="sr-only">
+          {label}
+        </label>
+        <MentionTextarea
+          id="reply-body"
+          value={value}
+          onChange={update}
+          context={context}
+          placeholder={placeholder}
+          textareaRef={ref}
+          onSubmitShortcut={() => submit()}
+        />
+        <LinkNote text={value} canPostExternal={canPostExternal} />
+        <div className="reply-foot">
+          <div className="tools">
+            <button
+              type="button"
+              className="act"
+              onClick={() => insertAt(ref.current, value, update)}
+            >
+              <Icon name="at" />
+              Mentionner
+            </button>
+            <span className="hint">
+              ou tapez @ · Ctrl + Entrée pour publier
+            </span>
+          </div>
           <button
-            type="button"
-            className="act"
-            onClick={() => insertAt(ref.current, value, update)}
+            className="btn btn-primary"
+            type="submit"
+            disabled={send.isPending}
+            aria-busy={send.isPending}
           >
-            <Icon name="at" />
-            Mentionner
+            {verb === "Commenter"
+              ? "Publier mon commentaire"
+              : "Publier ma réponse"}
           </button>
-          <span className="hint">ou tapez @ · Ctrl + Entrée pour publier</span>
         </div>
-        <button
-          className="btn btn-primary"
-          type="submit"
-          disabled={busy}
-          aria-busy={busy}
-        >
-          {verb === "Commenter"
-            ? "Publier mon commentaire"
-            : "Publier ma réponse"}
-        </button>
+      </form>
+    </>
+  );
+}
+
+/** Reply being sent: shown in place right away, replaced by the stored one on refresh. */
+function PendingReply({
+  author,
+  text,
+  verb,
+}: {
+  author: AvatarPerson;
+  text: string;
+  verb: string;
+}) {
+  return (
+    <article className="post reply is-pending" aria-busy="true">
+      <div className="author">
+        <Avatar person={author} size="sm" link={false} />
+        <div>
+          <span className="author-name">{author.name}</span>
+          <div className="author-sub">
+            {verb === "Commenter" ? "Commentaire" : "Réponse"} en cours
+            d&apos;envoi…
+          </div>
+        </div>
       </div>
-    </form>
+      <Prose text={text} />
+    </article>
   );
 }

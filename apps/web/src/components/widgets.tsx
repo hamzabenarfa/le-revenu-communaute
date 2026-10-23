@@ -1,20 +1,28 @@
 "use client";
 
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { rsvpEvent, votePoll } from "@/app/actions/community";
-import { discussionHref } from "@/lib/discussion-query";
+import { useEffect, useRef, useState } from "react";
+import { loadFeedPage, rsvpEvent, votePoll } from "@/app/actions/community";
+import {
+  discussionHref,
+  type FeedFilters,
+  feedHref,
+} from "@/lib/discussion-query";
 import { cleanTitle, fmt } from "@/lib/format";
 import type {
   CommunityEvent,
   DiscussionSummary,
   FeedTab,
+  Pagination,
   PollOption,
 } from "@/lib/strapi/types";
 import { useApp } from "./app/app-context";
+import { useActionMutation } from "./app/use-action-mutation";
 import { Avatar } from "./atoms";
 import { TopicCard, TopicRow } from "./feed";
 import { Icon, type IconName } from "./icon";
+import { FeedSkeleton } from "./skeletons";
 
 /* --------------------------------------------------------------- Density */
 
@@ -57,12 +65,132 @@ export interface FeedTabLink {
   href: string;
 }
 
+/* --------------------------------------------------------- Infinite feed */
+
+export interface FeedPaging {
+  filters: FeedFilters;
+  pagination: Pagination;
+  logged: boolean;
+}
+
+interface FeedPage {
+  items: DiscussionSummary[];
+  pagination: Pagination;
+}
+
+/**
+ * Pages after the server-rendered one, loaded while scrolling. The key holds the
+ * first page's ids: when the server sends a different first page (refresh after
+ * login, new discussion), loading starts over from it.
+ */
+function useFeedPages(first: DiscussionSummary[], paging: FeedPaging) {
+  const { filters, pagination } = paging;
+  const query = useInfiniteQuery({
+    queryKey: [
+      "feed",
+      filters.category,
+      filters.tab,
+      pagination.page,
+      first.map((d) => d.documentId).join(),
+    ],
+    queryFn: async ({ pageParam }): Promise<FeedPage> => {
+      const result = await loadFeedPage({ ...filters, page: pageParam });
+      if (!result.ok) throw new Error(result.error);
+      return {
+        items: result.data.data,
+        pagination: result.data.meta.pagination,
+      };
+    },
+    initialPageParam: pagination.page,
+    initialData: {
+      pages: [{ items: first, pagination }],
+      pageParams: [pagination.page],
+    },
+    getNextPageParam: ({ pagination: p }) =>
+      p.page < p.pageCount ? p.page + 1 : undefined,
+    // Loaded pages are kept as is: refetching them all would reshuffle the list.
+    staleTime: Number.POSITIVE_INFINITY,
+  });
+  // Page 1 always comes from the server props (fresh counts); new activity can
+  // shift offsets between pages, so a discussion is only listed once.
+  const seen = new Set<string>();
+  const discussions = [first, ...query.data.pages.slice(1).map((p) => p.items)]
+    .flat()
+    .filter((d) => !seen.has(d.documentId) && Boolean(seen.add(d.documentId)));
+  return { query, discussions };
+}
+
+/**
+ * Loads the next 12 when the member scrolls to the end of the list; the loading
+ * cards show while it arrives, without reloading the page.
+ */
+function LoadMore({
+  query,
+}: {
+  query: ReturnType<typeof useFeedPages>["query"];
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const {
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    fetchNextPage,
+    error,
+    data,
+  } = query;
+  const canLoad = hasNextPage && !isFetchingNextPage && !isFetchNextPageError;
+  const loaded = data.pages.reduce((n, p) => n + p.items.length, 0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !canLoad) return;
+    // Triggers just before the end of the list, so the loading cards are visible.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) void fetchNextPage();
+      },
+      { rootMargin: "0px 0px 150px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [canLoad, fetchNextPage]);
+
+  const last = data.pages[data.pages.length - 1]?.pagination;
+  return (
+    <div className="feed-more" ref={ref}>
+      {isFetchingNextPage && <FeedSkeleton count={2} />}
+      {isFetchNextPageError && (
+        <div className="card empty" role="alert">
+          <p>{error?.message ?? "Impossible de charger la suite."}</p>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={() => void fetchNextPage()}
+          >
+            <Icon name="refresh" />
+            Réessayer
+          </button>
+        </div>
+      )}
+      {last && (
+        <p className="hint num" aria-live="polite">
+          {Math.min(loaded, last.total)} discussions affichées sur {last.total}
+        </p>
+      )}
+      {!hasNextPage && data.pages.length > 1 && (
+        <p className="hint">Vous avez parcouru toutes les discussions.</p>
+      )}
+    </div>
+  );
+}
+
 /** Tabs + density toggle + list; inserts the weekly poll after the third card on mobile (home only). */
 export function FeedSection({
   tabs,
   active,
   unanswered,
-  discussions,
+  discussions: firstPage,
+  paging,
   inlinePoll,
   emptyText,
 }: {
@@ -70,11 +198,13 @@ export function FeedSection({
   active: FeedTab;
   unanswered: number;
   discussions: DiscussionSummary[];
+  paging: FeedPaging;
   inlinePoll?: React.ReactNode;
   emptyText: { title: string; text: string };
 }) {
   const [density, setDensity] = useDensity();
   const { openComposer } = useApp();
+  const { query, discussions } = useFeedPages(firstPage, paging);
   const view = (d: Density, icon: IconName, label: string) => (
     <button
       type="button"
@@ -161,7 +291,17 @@ export function FeedSection({
           {view("compact", "list", "Vue compacte")}
         </span>
       </div>
+      {paging.pagination.page > 1 && (
+        <Link
+          className="btn btn-quiet btn-sm"
+          href={feedHref({ ...paging.filters, page: 1 }, paging.logged)}
+        >
+          <Icon name="arrowL" />
+          Revenir aux premières discussions
+        </Link>
+      )}
       {list}
+      {discussions.length > 0 && <LoadMore query={query} />}
     </>
   );
 }
@@ -233,18 +373,32 @@ export function Poll({
   options: PollOption[];
   myVote: number | null;
 }) {
-  const { requireLogin, handle } = useApp();
+  const { requireLogin } = useApp();
   const [state, setState] = useState({ options, myVote });
   useEffect(() => setState({ options, myVote }), [options, myVote]);
   const total = state.options.reduce((s, o) => s + o.votes, 0);
   const voted = state.myVote !== null;
 
+  // Results show at once with the vote moved; the server's counts replace them.
+  const send = useActionMutation((i: number) => votePoll(discussionId, i), {
+    onMutate: (i) => {
+      const before = state;
+      setState({
+        myVote: i,
+        options: before.options.map((o, k) => ({
+          ...o,
+          votes: o.votes - (k === before.myVote ? 1 : 0) + (k === i ? 1 : 0),
+        })),
+      });
+      return before;
+    },
+    onError: (_error, _i, before) => before && setState(before),
+    onSuccess: (data) =>
+      setState({ options: data.pollOptions, myVote: data.myVote }),
+  });
   const vote = (i: number) =>
-    requireLogin(async () => {
-      if (state.myVote === i) return;
-      const result = await votePoll(discussionId, i);
-      const data = handle(result, () => vote(i));
-      if (data) setState({ options: data.pollOptions, myVote: data.myVote });
+    requireLogin(() => {
+      if (state.myVote !== i && !send.isPending) send.mutate(i);
     });
 
   return (
@@ -346,31 +500,46 @@ const dayParts = (iso: string) => {
 };
 
 export function EventsWidget({ events }: { events: CommunityEvent[] }) {
-  const { requireLogin, handle, toast } = useApp();
+  const { requireLogin, toast } = useApp();
   const [list, setList] = useState(events);
   useEffect(() => setList(events), [events]);
+  const put = (updated: CommunityEvent) =>
+    setList((l) =>
+      l.map((x) => (x.documentId === updated.documentId ? updated : x)),
+    );
+  const send = useActionMutation(
+    (e: CommunityEvent) => rsvpEvent(e.documentId),
+    {
+      onMutate: (e) =>
+        put({
+          ...e,
+          attending: !e.attending,
+          going: Math.max(0, e.going + (e.attending ? -1 : 1)),
+        }),
+      onError: (_error, e) => put(e),
+      onSuccess: (updated) => {
+        put(updated);
+        if (updated.attending)
+          toast(
+            <>
+              <Icon name="cal" />
+              <div>
+                <b>C&apos;est noté !</b>
+                <small>
+                  Rappel la veille par notification et e-mail. Vous pouvez déjà
+                  poser vos questions.
+                </small>
+              </div>
+            </>,
+          );
+      },
+    },
+  );
   if (!list.length) return null;
 
   const rsvp = (e: CommunityEvent) =>
-    requireLogin(async () => {
-      const updated = handle(await rsvpEvent(e.documentId), () => rsvp(e));
-      if (!updated) return;
-      setList((l) =>
-        l.map((x) => (x.documentId === updated.documentId ? updated : x)),
-      );
-      if (updated.attending)
-        toast(
-          <>
-            <Icon name="cal" />
-            <div>
-              <b>C&apos;est noté !</b>
-              <small>
-                Rappel la veille par notification et e-mail. Vous pouvez déjà
-                poser vos questions.
-              </small>
-            </div>
-          </>,
-        );
+    requireLogin(() => {
+      if (!send.isPending) send.mutate(e);
     });
 
   return (

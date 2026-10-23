@@ -34,6 +34,14 @@ export async function getDiscussion(
 export const getFeatured = async () =>
   (await viewerFetch<{ data: Featured }>("/discussions/featured")).data;
 
+/** Anonymous on purpose: the sitemap lists what a search engine may index. */
+export const getSitemapDiscussions = async () =>
+  (
+    await strapiFetch<{
+      data: Array<{ slug: string; lastModified: string | null }>;
+    }>("/discussions/sitemap")
+  ).data;
+
 export const searchDiscussions = async (q: string) =>
   (
     await viewerFetch<{ data: DiscussionSummary[] }>("/search", {

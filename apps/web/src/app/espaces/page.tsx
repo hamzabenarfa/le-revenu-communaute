@@ -10,7 +10,10 @@ import { fmt } from "@/lib/format";
 import { StrapiError } from "@/lib/strapi/errors";
 import { listSpaces } from "@/lib/strapi/spaces";
 
-export const metadata: Metadata = { title: "Tous les espaces" };
+export const metadata: Metadata = {
+  title: "Tous les espaces",
+  alternates: { canonical: "/espaces" },
+};
 
 async function Spaces() {
   let spaces: Awaited<ReturnType<typeof listSpaces>>;

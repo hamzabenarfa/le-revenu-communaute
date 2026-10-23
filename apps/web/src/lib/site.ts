@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+
+/**
+ * Public origin of the site, used for canonical URLs, sitemap.xml and Open Graph.
+ * Read at build time for static pages: set SITE_URL for `next build` too.
+ */
+export const SITE_URL = (
+  process.env.SITE_URL ?? "http://localhost:3000"
+).replace(/\/+$/, "");
+export const SITE_NAME = "Communauté Le Revenu";
+
+export const absoluteUrl = (path: string) => new URL(path, SITE_URL).toString();
+
+/** Child `openGraph` replaces the parent's: every page goes through this to keep the shared fields. */
+export const openGraph = (
+  og: NonNullable<Metadata["openGraph"]>,
+): Metadata["openGraph"] => ({
+  siteName: SITE_NAME,
+  locale: "fr_FR",
+  type: "website",
+  ...og,
+});
+
+/** Utility pages (forms, search results, sign-in): reachable, but not search results themselves. */
+export const NO_INDEX: Metadata["robots"] = { index: false, follow: true };

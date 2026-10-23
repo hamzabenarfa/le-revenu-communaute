@@ -8,10 +8,11 @@ import { Icon } from "@/components/icon";
 import { Layout } from "@/components/shell";
 import { FeedSkeleton } from "@/components/skeletons";
 import { ComposeButton } from "@/components/widgets";
+import { NO_INDEX } from "@/lib/site";
 import { searchDiscussions } from "@/lib/strapi/discussions";
 import { StrapiError } from "@/lib/strapi/errors";
 
-export const metadata: Metadata = { title: "Rechercher" };
+export const metadata: Metadata = { title: "Rechercher", robots: NO_INDEX };
 const SUGGESTIONS = [
   "PEA",
   "assurance-vie",

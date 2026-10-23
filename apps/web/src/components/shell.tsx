@@ -10,6 +10,7 @@ import { HeaderActions } from "./app/header-actions";
 import { HeaderSearch } from "./app/header-search";
 import { HoverCards } from "./app/hovercards";
 import { ModalHost } from "./app/modals";
+import { QueryProvider } from "./app/query-provider";
 import { SpaceIcon, spaceHref } from "./atoms";
 import { Icon } from "./icon";
 
@@ -125,14 +126,16 @@ export async function SessionBoundary({ children }: { children: ReactNode }) {
     }),
   ]);
   return (
-    <AppProvider initialMe={me} spaces={spaces}>
-      <SiteBar subscriber={Boolean(me?.subscriber)} />
-      <Header />
-      <div className="wrap">{children}</div>
-      <BottomNav />
-      <ModalHost />
-      <HoverCards />
-    </AppProvider>
+    <QueryProvider>
+      <AppProvider initialMe={me} spaces={spaces}>
+        <SiteBar subscriber={Boolean(me?.subscriber)} />
+        <Header />
+        <div className="wrap">{children}</div>
+        <BottomNav />
+        <ModalHost />
+        <HoverCards />
+      </AppProvider>
+    </QueryProvider>
   );
 }
 

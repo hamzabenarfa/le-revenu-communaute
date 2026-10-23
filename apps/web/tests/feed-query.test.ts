@@ -3,6 +3,7 @@ import {
   discussionHref,
   feedHref,
   parseFeedFilters,
+  sanitizeFeedFilters,
   toDiscussionApiQuery,
 } from "@/lib/discussion-query";
 
@@ -94,5 +95,31 @@ describe("links", () => {
 
   it("encodes slugs", () => {
     expect(discussionHref("a b")).toBe("/discussions/a%20b");
+  });
+});
+
+describe("sanitizeFeedFilters", () => {
+  it("accepts the filters of a feed page", () => {
+    expect(
+      sanitizeFeedFilters({ category: "bourse", tab: "new", page: 3 }),
+    ).toEqual({ category: "bourse", tab: "new", page: 3 });
+    expect(sanitizeFeedFilters({ tab: "hot", page: 2 })).toEqual({
+      category: null,
+      tab: "hot",
+      page: 2,
+    });
+  });
+
+  it("refuses anything a browser could tamper with", () => {
+    for (const raw of [
+      { tab: "drop", page: 2 },
+      { tab: "new", page: "2" },
+      { tab: "new", page: 0 },
+      { tab: "new", page: 1.5 },
+      { tab: "new", page: 10_001 },
+      { category: "../admin", tab: "new", page: 2 },
+      { category: 42, tab: "new", page: 2 },
+    ])
+      expect(sanitizeFeedFilters(raw)).toBeNull();
   });
 });

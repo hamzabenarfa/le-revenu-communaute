@@ -23,13 +23,28 @@ import { LoginButton } from "@/components/widgets";
 import { postHref } from "@/lib/discussion-query";
 import { ago, cap, fmt } from "@/lib/format";
 import { getCurrentUser } from "@/lib/session";
+import { openGraph } from "@/lib/site";
 import { getPost, getSiteArticles } from "@/lib/strapi/community";
 
 type Props = PageProps<"/billets/[slug]">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await soft(getPost((await params).slug));
-  return { title: p?.title ?? "Billet", description: p?.excerpt };
+  if (!p) return { title: "Billet" };
+  return {
+    title: p.title,
+    description: p.excerpt,
+    alternates: { canonical: postHref(p.slug) },
+    openGraph: openGraph({
+      type: "article",
+      title: p.title,
+      description: p.excerpt,
+      url: postHref(p.slug),
+      publishedTime: p.publishedAt ?? undefined,
+      section: p.category?.name,
+      authors: p.author ? [p.author.name] : undefined,
+    }),
+  };
 }
 
 async function PostView({ params }: Props) {

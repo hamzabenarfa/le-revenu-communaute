@@ -30,6 +30,7 @@ import {
 import { TopicCard } from "@/components/feed";
 import { soft } from "@/components/feed-page";
 import { Icon } from "@/components/icon";
+import { JsonLd } from "@/components/json-ld";
 import { Prose } from "@/components/prose";
 import { Layout } from "@/components/shell";
 import { FeedSkeleton } from "@/components/skeletons";
@@ -39,8 +40,11 @@ import {
   LoginButton,
   Poll,
 } from "@/components/widgets";
+import { discussionHref } from "@/lib/discussion-query";
 import { ago, fmt } from "@/lib/format";
+import { breadcrumbJsonLd, discussionJsonLd } from "@/lib/json-ld";
 import { getCurrentUser } from "@/lib/session";
+import { NO_INDEX, openGraph } from "@/lib/site";
 import { getEvents } from "@/lib/strapi/community";
 import { getDiscussion } from "@/lib/strapi/discussions";
 import { findSpace } from "@/lib/strapi/spaces";
@@ -50,10 +54,23 @@ type Props = PageProps<"/discussions/[slug]">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const d = await soft(getDiscussion((await params).slug));
+  if (!d) return { title: "Discussion" };
   return {
-    title: d?.title ?? "Discussion",
-    description: d?.excerpt,
-    robots: d?.seo && !d.seo.indexed ? { index: false } : undefined,
+    title: d.title,
+    description: d.excerpt,
+    alternates: { canonical: discussionHref(d.slug) },
+    // Editorial rule computed by Strapi: Café, unanswered or low-signal threads stay out of the index.
+    robots: d.indexable ? undefined : NO_INDEX,
+    openGraph: openGraph({
+      type: "article",
+      title: d.title,
+      description: d.excerpt,
+      url: discussionHref(d.slug),
+      publishedTime: d.publishedAt ?? undefined,
+      modifiedTime: d.lastActivityAt ?? undefined,
+      section: d.category?.name,
+      authors: d.author ? [d.author.name] : undefined,
+    }),
   };
 }
 
@@ -251,6 +268,15 @@ async function DiscussionView({ params }: Props) {
         </Suspense>
       }
     >
+      <JsonLd data={discussionJsonLd(d)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          ...(d.category
+            ? [{ name: d.category.name, path: spaceHref(d.category.slug) }]
+            : []),
+          { name: d.title, path: discussionHref(d.slug) },
+        ])}
+      />
       <nav className="crumbs" aria-label="Fil d'Ariane">
         <Link href="/">Accueil</Link>
         {d.category && (

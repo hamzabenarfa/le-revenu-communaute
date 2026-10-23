@@ -28,6 +28,10 @@ export default factories.createCoreController(UID, ({ strapi }) => {
     async featured(ctx) {
       ctx.body = await service().featured(optionalUser(ctx.state));
     },
+    /** GET /api/discussions/sitemap */
+    async sitemap(ctx) {
+      ctx.body = await service().sitemap();
+    },
     /** GET /api/discussions/similar?q= */
     async similar(ctx) {
       ctx.body = await service().similar(validateSearch(ctx.query));

@@ -15,6 +15,61 @@ This is a full-stack technical test: it turns an interactive HTML prototype into
   <img src="docs/screenshots/mobile.jpg" alt="Mobile: home, discussion and profile" width="49%">
 </p>
 
+## Run it (one command)
+
+You only need **Docker** (with Compose v2). No Node, no bun, no `.env` file.
+
+```bash
+git clone https://github.com/hamzabenarfa/le-revenu-communaute.git
+cd le-revenu-communaute
+docker compose up --build
+```
+
+The first start takes a few minutes: it builds both images, creates the database schema and loads the demo data. It is ready when the `web` container logs `Ready`. Then open:
+
+| What | URL | Login |
+| --- | --- | --- |
+| **The community** | <http://localhost:3000> | `demo@demo.fr` / `demo@demo.fr` |
+| Strapi admin | <http://localhost:1337/admin> | `admin@demo.fr` / `Admin-Demo-2026` |
+
+### Demo accounts
+
+| Login | Password | Use it to see |
+| --- | --- | --- |
+| `demo@demo.fr` | `demo@demo.fr` | A fresh member |
+| `camille.b@demo.lerevenu.local` | `Demo-Revenu-2026` | An active member: interests, streak, notifications |
+| `thomas.pea@demo.lerevenu.local` | `Demo-Revenu-2026` | The author of a question: choose a best answer |
+| `laredaction@demo.lerevenu.local` | `Demo-Revenu-2026` | The newsroom: SEO card, answer verification |
+
+A guided 5-minute tour is in [docs/DEMO.md](docs/DEMO.md).
+
+### Stop, reset, troubleshoot
+
+```bash
+docker compose down        # stop (data is kept)
+docker compose down -v     # stop and delete all data; the next `up` re-seeds from scratch
+```
+
+- **A port is already taken** (3000, 1337 or 5433): `WEB_PORT=3001 CMS_PORT=1338 DATABASE_PORT=5434 docker compose up --build`.
+- **"Impossible de charger les discussions"**: the CMS is still starting. Wait for `docker compose ps` to show `cms` as `healthy`.
+
+The secrets in `docker-compose.yml` are public demo placeholders. Override them in a root `.env` before running the stack anywhere other than your own machine.
+
+## Local development
+
+To work on the code with hot reload, run PostgreSQL in Docker and the two apps on your machine (Node.js 20–26, bun 1.4):
+
+```bash
+cp .env.example .env && docker compose up -d db                       # PostgreSQL on :5433
+
+cd apps/cms && cp .env.example .env && npm install
+npm run seed && npm run develop                                        # Strapi on :1337
+
+cd apps/web && cp .env.example .env.local && bun install && bun run dev  # App on :3000 (another terminal)
+```
+
+Stop the `cms` and `web` containers first if the full stack is running (`docker compose stop cms web`). Full setup and every environment variable: [docs/INSTALL.md](docs/INSTALL.md).
+
 ## Features
 
 - **Feed:** four tabs ("Pour vous", "Tendances", "Récentes", "Sans réponse"), ranked and paginated by the server. Thematic spaces, a detailed or compact view, search.
@@ -24,19 +79,6 @@ This is a full-stack technical test: it turns an interactive HTML prototype into
 - **Members:** profiles, hover cards, onboarding with interests, a profile photo.
 - **Newsroom:** the weekly question and poll, "Le Revenu répond" live sessions with RSVP, and an editorial role that sees SEO status and verifies answers.
 - **Notifications:** replies, follows, mentions, "Utile", best answers, badges and levels.
-
-## Quick start
-
-```bash
-cp .env.example .env && docker compose up -d db                     # PostgreSQL on :5433
-
-cd apps/cms && cp .env.example .env && npm install
-npm run seed && npm run develop                                      # Strapi on :1337
-
-cd ../web && cp .env.example .env.local && bun install && bun run dev  # App on :3000
-```
-
-Open <http://localhost:3000> and log in with **`demo@demo.fr` / `demo@demo.fr`**. The other demo accounts, including the newsroom account, are listed in [docs/DEMO.md](docs/DEMO.md). Replace the `changeMe` secrets in `apps/cms/.env` before using the CMS anywhere other than your own machine. Full setup: [docs/INSTALL.md](docs/INSTALL.md).
 
 ## How it is built
 
@@ -53,6 +95,8 @@ Browser ──▶ Next.js (Server Components + Server Actions) ──REST + JWT�
 Details: [architecture and decisions](docs/ARCHITECTURE.md) · [data model](docs/DATA-MODEL.md) · [API](docs/API.md) · [security](docs/SECURITY.md) · [design](docs/DESIGN.md).
 
 ## Tests
+
+The tests run on your machine against the Docker database (`docker compose up -d db`, then the `npm install` / `bun install` steps above):
 
 ```bash
 cd apps/cms && npm test      # 156 tests: unit + integration against a real Strapi and PostgreSQL

@@ -56,6 +56,25 @@ export function parseFeedFilters(
   };
 }
 
+/** Filters sent back by the browser to load the next feed page: anything off is refused. */
+export function sanitizeFeedFilters(raw: {
+  category?: unknown;
+  tab?: unknown;
+  page?: unknown;
+}): FeedFilters | null {
+  const category = raw.category ?? null;
+  if (
+    category !== null &&
+    (typeof category !== "string" || !SLUG_RE.test(category))
+  )
+    return null;
+  const tab = (Object.keys(TAB_PARAM) as FeedTab[]).find((t) => t === raw.tab);
+  const page = raw.page;
+  if (!tab || typeof page !== "number" || !Number.isInteger(page)) return null;
+  if (page < 1 || page > 10_000) return null;
+  return { category, tab, page };
+}
+
 /** Query string understood by `GET /api/discussions` (see apps/cms validation). */
 export function toDiscussionApiQuery(filters: FeedFilters): URLSearchParams {
   const query = new URLSearchParams({

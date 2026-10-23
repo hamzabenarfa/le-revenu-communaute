@@ -7,6 +7,7 @@ const READ = [
   'api::discussion.discussion.findBySlug',
   'api::discussion.discussion.featured',
   'api::discussion.discussion.similar',
+  'api::discussion.discussion.sitemap',
   'api::discussion.discussion.search',
   'api::post.post.find',
   'api::post.post.findBySlug',

@@ -56,6 +56,8 @@ export interface DiscussionSummary {
   pollVotes: number | null;
   participants: Person[];
   isNew: boolean;
+  /** Public robots decision (the editorial rule); `seo` details are staff-only. */
+  indexable: boolean;
   seo?: SeoStatus;
 }
 

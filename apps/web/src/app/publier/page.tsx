@@ -3,8 +3,12 @@ import { Suspense } from "react";
 import { OpenComposerOnMount } from "@/components/profile-buttons";
 import { Layout } from "@/components/shell";
 import { FeedSkeleton } from "@/components/skeletons";
+import { NO_INDEX } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Nouvelle publication" };
+export const metadata: Metadata = {
+  title: "Nouvelle publication",
+  robots: NO_INDEX,
+};
 
 async function Publish({
   searchParams,

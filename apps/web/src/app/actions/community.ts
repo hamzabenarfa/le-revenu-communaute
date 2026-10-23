@@ -1,11 +1,13 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { sanitizeFeedFilters } from "@/lib/discussion-query";
 import { getSessionToken } from "@/lib/session";
 import * as community from "@/lib/strapi/community";
 import * as discussions from "@/lib/strapi/discussions";
 import type {
   CommunityEvent,
+  Feed,
   Me,
   MemberCard,
   Notification,
@@ -32,6 +34,21 @@ async function asMember<T>(
   if (!token) return NEEDS_LOGIN;
   try {
     return await run(token);
+  } catch (error) {
+    return toFailure(error);
+  }
+}
+
+/** Next feed page for infinite scroll; read as the visitor, like the server-rendered first page. */
+export async function loadFeedPage(input: {
+  category: unknown;
+  tab: unknown;
+  page: unknown;
+}): Promise<ActionResult<Feed>> {
+  const filters = sanitizeFeedFilters(input);
+  if (!filters) return { ok: false, error: "Page de discussions invalide." };
+  try {
+    return { ok: true, data: await discussions.listDiscussions(filters) };
   } catch (error) {
     return toFailure(error);
   }

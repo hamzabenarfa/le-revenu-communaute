@@ -38,5 +38,6 @@ export const discussion = (
   pollVotes: null,
   participants: [person({ username: "Vincent_ETF", name: "Vincent" })],
   isNew: false,
+  indexable: true,
   ...overrides,
 });

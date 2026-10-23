@@ -16,6 +16,7 @@ import { FeedSkeleton } from "@/components/skeletons";
 import { BlogButton, ComposeButton } from "@/components/widgets";
 import { discussionHref } from "@/lib/discussion-query";
 import { getCurrentUser } from "@/lib/session";
+import { openGraph } from "@/lib/site";
 import { getLeaderboard, getProfile } from "@/lib/strapi/community";
 
 type Props = PageProps<"/membres/[username]">;
@@ -23,7 +24,24 @@ type Tab = "billets" | "discussions" | "reponses" | "progression";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await soft(getProfile((await params).username));
-  return { title: p ? `${p.name} (@${p.username})` : "Membre" };
+  if (!p) return { title: "Membre" };
+  const title = `${p.name} (@${p.username})`;
+  const path = `/membres/${encodeURIComponent(p.username)}`;
+  const description =
+    p.bio || `Les contributions de ${p.name} à la communauté du Revenu.`;
+  return {
+    title,
+    description,
+    // Profile tabs are query variants of the same page.
+    alternates: { canonical: path },
+    openGraph: openGraph({
+      type: "profile",
+      title,
+      description,
+      url: path,
+      username: p.username,
+    }),
+  };
 }
 
 const Empty = ({

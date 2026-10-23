@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { CatScroller, Feed, soft } from "@/components/feed-page";
@@ -31,6 +32,9 @@ import {
 import { getFeatured } from "@/lib/strapi/discussions";
 import { listSpaces } from "@/lib/strapi/spaces";
 import type { Me } from "@/lib/strapi/types";
+
+// Feed tabs and pages are query variants of the same page.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function Hero() {
   const stats = await soft(getStats());

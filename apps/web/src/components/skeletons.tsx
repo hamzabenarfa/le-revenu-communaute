@@ -1,12 +1,12 @@
 /** Loading placeholders in the prototype's surfaces (no spinner over the whole page). */
-export function FeedSkeleton() {
+export function FeedSkeleton({ count = 4 }: { count?: number }) {
   return (
     <output
       className="feed"
       aria-label="Chargement des discussions"
       style={{ display: "flex" }}
     >
-      {[0, 1, 2, 3].map((i) => (
+      {[0, 1, 2, 3].slice(0, count).map((i) => (
         <div key={i} className="tcard" aria-hidden="true">
           <div
             className="tcount"
