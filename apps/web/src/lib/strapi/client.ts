@@ -1,7 +1,14 @@
 import "server-only";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import { StrapiError, toStrapiError } from "./errors";
 
 const DEFAULT_TIMEOUT_MS = 8000;
+// Reads wait out a Render cold start (about a minute) instead of failing the page,
+// except during `next build`, which gives each page 60 s to prerender.
+const READ_TIMEOUT_MS =
+  process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
+    ? DEFAULT_TIMEOUT_MS
+    : 75000;
 
 function baseUrl(): string {
   const url = process.env.STRAPI_URL;
@@ -33,7 +40,7 @@ export async function strapiFetch<T>(
     query,
     body,
     token,
-    timeoutMs = DEFAULT_TIMEOUT_MS,
+    timeoutMs = method === "GET" ? READ_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
   }: StrapiRequest = {},
 ): Promise<T> {
   const url = `${baseUrl()}/api${path}${query?.size ? `?${query}` : ""}`;
